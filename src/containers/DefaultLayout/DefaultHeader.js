@@ -35,11 +35,9 @@ class DefaultHeader extends Component {
 
           <UncontrolledDropdown nav direction="down">
             <DropdownToggle nav>
-              <img src={'../../assets/img/avatars/6.jpg'} className="img-avatar" alt="admin@bootstrapmaster.com" />
+              <img src={this.props.photo || '../../assets/img/avatars/6.jpg'} className="img-avatar" alt="admin@bootstrapmaster.com" />
             </DropdownToggle>
             <DropdownMenu right>
-              <DropdownItem header tag="div" className="text-center"><strong>Account</strong></DropdownItem>
-              {/* <DropdownItem onClick={e => this.props.onLogout(e)}><i className="fa fa-lock"></i> Logout</DropdownItem> */}
               <DropdownItem onClick={(e) => this.handleLogout()}>
                 <i className="fa fa-lock" />
                 {' '}
@@ -56,5 +54,4 @@ class DefaultHeader extends Component {
 DefaultHeader.propTypes = propTypes;
 DefaultHeader.defaultProps = defaultProps;
 
-//export default DefaultHeader;
 export default firestoreConnect()(DefaultHeader);
