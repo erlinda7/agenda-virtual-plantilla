@@ -101,7 +101,7 @@ class Contact extends Component {
           namePhoto: this.state.namePhoto,
         },
       );
-      this.props.history.push('/dashboard/');
+      this.props.history.push('/contacts/');
     } else {
       await firestore.add(
         { collection: 'contacts' },
@@ -111,7 +111,7 @@ class Contact extends Component {
           userId: idUser,
         },
       );
-      this.props.history.push('/dashboard/');
+      this.props.history.push('/contacts');
       window.location.reload(true);
     }
   };
@@ -129,12 +129,10 @@ class Contact extends Component {
         .then(()=>console.log('contact photo delete'))
         .catch((error)=>console.log(error));
 
-      this.props.history.push('/dashboard');
+      this.props.history.push('/contacts');
     });
   }
   render() {
-    console.log('photoname', this.state.namePhoto);
-    
     const {
       contacts,
       upload,
@@ -273,7 +271,7 @@ class Contact extends Component {
           &nbsp;
           <Button
             color="secondary"
-            onClick={() => this.props.history.push('/dashboard/')}
+            onClick={() => this.props.history.push('/contacts/')}
           >
             Cancel
           </Button>

@@ -1,0 +1,29 @@
+[role="button"] {
+    cursor: pointer;
+    padding: 2px;
+    color: #c8ced3;
+    border-color: #c8ced3;
+    display: inline-block;
+    border-radius: 0.25rem;
+    border: 1px solid;
+    padding: 0.375rem 0.75rem;
+    box-sizing: border-box;
+    margin-left: 2px;
+    margin-right: 2px;
+  }
+  [role="button"]:hover,
+  [role="button"]:focus,
+  [role="button"]:active {
+    background-color: #c8ced3;
+    border-color: #5d6a74;
+    color: #5d6a74;
+  }
+  ul {
+    list-style: none;
+  }
+  .pagination .active [aria-current] {
+    background-color: #20a8d8;
+    border-color: #20a8d8;
+    color: white;
+  }
+  

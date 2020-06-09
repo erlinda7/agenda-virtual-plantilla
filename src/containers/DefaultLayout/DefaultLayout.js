@@ -5,7 +5,6 @@ import * as router from 'react-router-dom';
 import { Container } from 'reactstrap';
 
 import {
-  AppAside,
   AppHeader,
   AppSidebar,
   AppSidebarFooter,
@@ -19,11 +18,8 @@ import {
 import navigation from '../../_nav';
 // routes config
 import routes from '../../routes';
-
-import { compose } from 'redux';
 import { firestoreConnect } from 'react-redux-firebase';
-import { connect } from 'react-redux';
-import PropTypes from 'prop-types';
+
 
 const DefaultHeader = React.lazy(() => import('./DefaultHeader'));
 
@@ -37,7 +33,6 @@ class DefaultLayout extends Component {
   }
 
   async componentDidMount() {
-    console.log((this.props.firebase.auth().currentUser.uid));
     const uid = this.props.firebase.auth().currentUser.uid;
     const { firebase } = this.props;
     let user = {};
