@@ -6,23 +6,23 @@ export default {
       name: 'Agenda Virtual',
     },
     {
-      name: 'SunEditor',
-      url: '/wysiwyg/suneditor',
+      name: 'Profile',
+      url: '/profile',
       icon: 'icon-start',
     },
     {
-      name: 'TinyMCE',
-      url: '/wysiwyg/tinymce',
+      name: 'Contacts',
+      url: '/contacts',
       icon: 'icon-start',
     },
     {
-      name: 'React-Draf-Wysiwyg',
+      name: 'Blocked Users',
       url: '/wysiwyg/draft',
       icon: 'icon-start',
     },
     {
-      name: 'WEB-React-Draf-Wysiwyg',
-      url: '/wysiwyg/draftweb',
+      name: 'List User',
+      url: '/wysiwyg/draft',
       icon: 'icon-start',
     },
 
