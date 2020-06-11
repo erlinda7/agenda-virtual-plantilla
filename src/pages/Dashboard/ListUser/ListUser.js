@@ -8,6 +8,7 @@ import {
   Col,
   Input,
   Row,
+  Alert,
 } from 'reactstrap';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
@@ -26,6 +27,8 @@ class Contacts extends Component {
     this.state = {
       filterText: '',
       currentPage: 0,
+      visibleAlert: false,
+      alert: { type: '', message: '' },
     };
   }
 
@@ -33,60 +36,95 @@ class Contacts extends Component {
 
   lastElement = () => this.firstElement() + pageSize;
 
+  onDismiss = () => this.setState({ visibleAlert: false });
+
+  async addContact(id) {
+    const { users, firestore } = this.props;
+    const user = users.filter(item => item.id === id);
+    const userId = this.props.firebase.auth().currentUser.uid;
+    // console.log('idUser', userId);
+    // console.log('vinculed', id)
+    // console.log('user add', user);
+
+    await firestore.add(
+      { collection: 'contacts' },
+      {
+        adress: user[0].adress,
+        email: user[0].email,
+        name: user[0].name,
+        photo: user[0].photo,
+        telephone: user[0].telephone,
+        userId: userId,
+        vinculed: id,
+      },
+    );
+    let alert = { type: 'success', message: 'Contact were saved successfully' };
+    this.setState({ alert, visibleAlert: true, editedList: false });
+   // window.location.reload(true);
+  }
+
+  actionHandler(id, action) {
+    switch (action) {
+      case 'add_action':
+        this.addContact(id);
+        break;
+      default: console.log('undefined action... =(');
+        break;
+    }
+  }
+
   listUser() {
-    // console.log('users', this.props.users);
     const { currentUser } = this.props.firebase.auth()
     const uid = currentUser.uid;
     const providerId = currentUser.providerData[0].providerId;
     const contacts = this.props.contacts || [];
     const users = this.props.users || [];
-    let listUserFilter = [];
-    let filterContacts = contacts.filter(item => item.userId !== uid); //que no estan en mis contactos
-   
+    let listUserAggregates = []; //usuarios que me tienen agregado en sus contactos
+    
+
+    let filterNoContacts = contacts.filter(item => item.userId !== uid); //que no estan en mis contactos
+    let filterMyContacts = contacts.filter(item => item.userId === uid);
+
+
     if (providerId === 'google.com') {
-      let listUsersinRepetidos = [];
-      filterContacts.forEach(item => {
+      let listFinal = []; //los que me tienen agregados que no esten en mis contactos
+      filterNoContacts.forEach(item => {
         if (item.email === currentUser.email) {
           const userId = item.userId;
           const user = users.filter(item => item.uid === userId);
           if (user.length !== 0)
-            listUserFilter.push(user[0]);    //que me tienen agregado
+            listUserAggregates.push(user[0]);    
         }
       })
-
-      //para eliminar repetidos del array
-      listUsersinRepetidos = listUserFilter.filter((valorActual, indiceActual, arreglo) => {
-        return arreglo.findIndex(
-          valorDelArreglo => JSON.stringify(valorDelArreglo) === JSON.stringify(valorActual)
-        ) === indiceActual
-      });
-
-      return listUsersinRepetidos;
+      
+      listUserAggregates.forEach(item=>{
+        let aux= filterMyContacts.filter(c=>c.email===item.email);
+        if(aux.length===0){
+          listFinal.push(item);
+        }
+      })
+      return listFinal;
     }
 
     if (providerId === 'phone') {
-      let listUsersinRepetidos = [];
-      filterContacts.forEach(item => {        
+      let listFinal = [];
+      filterNoContacts.forEach(item => {
         if (item.telephone === currentUser.phoneNumber) {
           const userId = item.userId;
           const user = users.filter(item => item.uid === userId);
           if (user.length !== 0)
-            listUserFilter.push(user[0]);
+            listUserAggregates.push(user[0]);
         }
       })
 
-      //para eliminar repetidos del array
-      listUsersinRepetidos = listUserFilter.filter((valorActual, indiceActual, arreglo) => {
-        return arreglo.findIndex(
-          valorDelArreglo => JSON.stringify(valorDelArreglo) === JSON.stringify(valorActual)
-        ) === indiceActual
-      });
-      console.log('list', listUsersinRepetidos);
-      
-      return listUsersinRepetidos;
+      listUserAggregates.forEach(item=>{
+        let aux= filterMyContacts.filter(c=>c.telephone===item.telephone);
+        if(aux.length===0){
+          listFinal.push(item);
+        }
+      })
+      return listFinal;
     }
-
-
   }
 
   filterUsers() {
@@ -110,15 +148,27 @@ class Contacts extends Component {
   }
 
   render() {
+
+    const { visibleAlert, alert } = this.state;
     const filterUsers = this.filterUsers().slice(
       this.firstElement(),
       this.lastElement(),
     );
+    console.log('vvvvvv', filterUsers);
 
     return (
       <div className="animated fadeIn">
         <Row>
           <Col>
+            {visibleAlert && (
+              <Alert
+                color={alert.type}
+                isOpen={visibleAlert}
+                toggle={() => this.onDismiss()}
+              >
+                <strong>{alert.message}</strong>
+              </Alert>
+            )}
             <Card>
               <CardHeader>
                 <i className="fa fa-align-justify" />
@@ -144,11 +194,11 @@ class Contacts extends Component {
                     { value: 'name', label: 'Name' },
                     { value: 'telephone', label: 'Telephone' },
                     { value: 'email', label: 'Email' },
-                    //{ value: 'vinculed', label: 'Vinculed', type: 'checkContent' },
-                    { label: 'See More', type: 'detail-button' },
+                    { label: 'Action', type: 'add-button' },
                   ]}
                   content={filterUsers}
-                  onClick={(item) => this.props.history.push(`/listUser/${item.id}`)}
+                  //onClick={(item) => this.props.history.push(`/listUser/${item.id}`)}
+                  onClick={(item, action) => this.actionHandler(item.id, action)}
                 />
                 <ReactPaginate
                   previousLabel="previous"

@@ -157,6 +157,18 @@ function TableContent({
           </td>
         );
       }
+      case TABLE_TYPE.addButton: {
+        return (
+          <td key={index}>
+            <Button
+              color="primary"
+              onClick={() => onClick(item, 'add_action')}
+            >
+              Add Contact
+            </Button>
+          </td>
+        );
+      }
       default: {
         return <td key={index}>{item[header.value]}</td>;
       }
