@@ -125,6 +125,7 @@ class Profile extends Component {
     const telephone = users ? users.telephone : '';
     const email = users ? users.email : '';
     const adress = users ? users.adress : '';
+    const providerId = users ? users.providerId : '';
 
     return (
       <div className="animated fadeIn">

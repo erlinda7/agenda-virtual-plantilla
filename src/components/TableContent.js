@@ -48,13 +48,13 @@ function TableContent({
       }
       case TABLE_TYPE.checker: {
         let checkValue = false;
-        if (
-          header.value === 'extra_fee_status'
-          && (item.extra_fee_status || item.has_extra_fee)
-        ) {
-          checkValue = true;
-        }
-        if (header.value === 'has_extra_photos' && item.has_extra_photos) {
+        // if (
+        //   header.value === 'extra_fee_status'
+        //   && (item.extra_fee_status || item.has_extra_fee)
+        // ) {
+        //   checkValue = true;
+        // }
+        if (header.value === 'vinculed' && item.vinculed) {
           checkValue = true;
         }
         return (
@@ -91,7 +91,7 @@ function TableContent({
         return (
           <td key={index}>
             {item[header.value] ? (
-              <img width="100px" src={item[header.value]} alt="" />
+              <img width="50px" src={item[header.value]} alt="" />
             ) : (
                 ''
               )}

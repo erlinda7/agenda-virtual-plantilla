@@ -91,10 +91,11 @@ class Contacts extends Component {
                 <br />
                 <TableContent
                   headers={[
+                    { value: 'photo', label: 'Photo', type: 'image' },
                     { value: 'name', label: 'Name' },
                     { value: 'telephone', label: 'Telephone' },
                     { value: 'email', label: 'Email' },
-                    // { value: 'testimonial_image', label: 'Photo', type: 'image' },
+                    {value:'vinculed', label:'Vinculed', type:'checkContent'},
                     { label: 'See More', type: 'detail-button' },
                   ]}
                   content={filterContacts}
