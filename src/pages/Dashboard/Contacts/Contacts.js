@@ -33,13 +33,43 @@ class Contacts extends Component {
 
   lastElement = () => this.firstElement() + pageSize;
 
-  filterContacts() {
+  listContacts() {
     const uid = this.props.firebase.auth().currentUser.uid;
-    let str = this.state.filterText;
-    let filtered = this.props.contacts || [];
-    filtered = filtered.filter((item) => item.userId === uid);
+    const users = this.props.users || [];
+    let contacts = this.props.contacts || [];
+    contacts = contacts.filter((item) => item.userId === uid);
+    let listContacts = [];
 
-    // console.log('filterd uid', this.props.firebase.auth().currentUser.uid);
+    contacts.forEach(item => {
+      if (item.vinculed) {
+        console.log('vinculed', item.vinculed);
+        let user = users.filter(i => i.uid === item.vinculed);
+        if (user.length !== 0) {
+          const aux = {
+            id:item.id,
+            adress: user[0].adress,
+            email: user[0].email,
+            name:user[0].name,
+            photo: user[0].photo,
+            telephone: user[0].telephone,
+            userId:item.userId,
+            vinculed: item.vinculed,
+          }
+          listContacts.push(aux);
+        }
+
+      } else {
+        listContacts.push(item);
+      }
+    })
+    return listContacts;
+
+  }
+
+  filterContacts() {
+    let str = this.state.filterText;
+
+    let filtered = this.listContacts() || [];
 
     if (str) {
       str = str.toLowerCase();
@@ -95,7 +125,7 @@ class Contacts extends Component {
                     { value: 'name', label: 'Name' },
                     { value: 'telephone', label: 'Telephone' },
                     { value: 'email', label: 'Email' },
-                    {value:'vinculed', label:'Vinculed', type:'checkContent'},
+                    { value: 'vinculed', label: 'Vinculed', type: 'checkContent' },
                     { label: 'See More', type: 'detail-button' },
                   ]}
                   content={filterContacts}
@@ -125,17 +155,21 @@ class Contacts extends Component {
 
 Contacts.propTypes = {
   contacts: PropTypes.arrayOf(PropTypes.oneOfType([PropTypes.any])),
+  users: PropTypes.arrayOf(PropTypes.oneOfType([PropTypes.any])),
   history: PropTypes.objectOf(PropTypes.oneOfType(PropTypes.any)).isRequired,
   firebase: PropTypes.objectOf(PropTypes.oneOfType(PropTypes.any)).isRequired,
 };
 Contacts.defaultProps = {
   contacts: [],
+  users: [],
 };
 export default compose(
   firestoreConnect(() => [
     { collection: 'contacts' },
+    { collection: 'users' },
   ]),
   connect((state) => ({
     contacts: state.firestore.ordered.contacts ? state.firestore.ordered.contacts : [],
+    users: state.firestore.ordered.users ? state.firestore.ordered.users : [],
   })),
 )(Contacts);
