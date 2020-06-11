@@ -16,15 +16,14 @@ export default {
       icon: 'icon-start',
     },
     {
-      name: 'Blocked Users',
-      url: '/wysiwyg/draft',
+      name: 'List User',
+      url: '/listUser',
       icon: 'icon-start',
     },
     {
-      name: 'List User',
-      url: '/wysiwyg/draft',
+      name: 'Blocked Users',
+      url: '/blockedUser',
       icon: 'icon-start',
     },
-
   ],
 };
