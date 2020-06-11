@@ -1,5 +1,9 @@
 import firebase from '../../config/firebaseConfig';
 import * as firebaseui from 'firebaseui'
+import { functions } from 'firebase/app';
+import axios from "axios";
+
+const url = 'https://us-central1-agendavirtual-f818c.cloudfunctions.net/usersRequests/newUser';
 
 const user = async (uid) => {
   let userExits = false;
@@ -42,10 +46,18 @@ const db = async (currentUser) => {
             email: '',
             telephone,
             uid,
+            providerId,
             adress: '',
             photo: "https://firebasestorage.googleapis.com/v0/b/agendavirtual-f818c.appspot.com/o/photoDefault%2Fphoto_.jpg?alt=media&token=7521d6fb-f361-4b1f-b221-313d5e310aaa",
+
           }
         )
+        console.log('telefono', telephone);
+        
+        const vincu = await firebase.functions().httpsCallable(
+          `usersRequests/newUser?providerId=${providerId}&uid=${uid}&telephone=${telephone}`
+        );
+        await vincu();
     }
     if (providerId === 'google.com') {
       await firebase
@@ -58,13 +70,19 @@ const db = async (currentUser) => {
             email,
             telephone: '',
             uid,
+            providerId,
             adress: '',
             photo: "https://firebasestorage.googleapis.com/v0/b/agendavirtual-f818c.appspot.com/o/photoDefault%2Fphoto_.jpg?alt=media&token=7521d6fb-f361-4b1f-b221-313d5e310aaa",
           }
         )
+
+      const vincu = await firebase.functions().httpsCallable(
+        `usersRequests/newUser?providerId=${providerId}&uid=${uid}&email=${email}`
+      );
+      await vincu();
     }
     window.location.assign('/');
-  }else{
+  } else {
     window.location.assign('/');
   }
 }
@@ -74,7 +92,7 @@ let uiConfig = {
     signInSuccess: async function (currentUser, credential, redirectUrl) {
       db(currentUser);
 
-       return false;
+      return false;
     },
     uiShown: function () {
       document.getElementById('loader').style.display = 'none';
