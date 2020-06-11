@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {  UncontrolledDropdown, DropdownItem, DropdownMenu, DropdownToggle, Nav } from 'reactstrap';
+import { UncontrolledDropdown, DropdownItem, DropdownMenu, DropdownToggle, Nav } from 'reactstrap';
 import PropTypes from 'prop-types';
 
 import { AppSidebarToggler } from '@coreui/react';
@@ -22,6 +22,8 @@ class DefaultHeader extends Component {
     // eslint-disable-next-line
     const { children, ...attributes } = this.props;
 
+    const photo = this.props.photo ? this.props.photo : '../../assets/img/avatars/6.jpg';
+
     return (
       <React.Fragment>
         <AppSidebarToggler className="d-lg-none" display="md" mobile />
@@ -32,7 +34,7 @@ class DefaultHeader extends Component {
 
           <UncontrolledDropdown nav direction="down">
             <DropdownToggle nav>
-              <img src={this.props.photo || '../../assets/img/avatars/6.jpg'} className="img-avatar" alt="admin@bootstrapmaster.com" />
+              <img src={photo || ''} className="img-avatar" alt="admin@bootstrapmaster.com" />
             </DropdownToggle>
             <DropdownMenu right>
               <DropdownItem onClick={(e) => this.handleLogout()}>

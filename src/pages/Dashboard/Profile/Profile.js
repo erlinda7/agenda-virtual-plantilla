@@ -107,11 +107,6 @@ class Profile extends Component {
   }
 
   render() {
-    const {
-      users,
-      upload,
-    } = this.state;
-
     const bannerStyle = {
       marginBottom: 20,
       width: '100%',
@@ -120,12 +115,23 @@ class Profile extends Component {
 
     };
 
+    const {
+      users,
+      upload,
+    } = this.state;
+
+    const photo = users ? users.photo : '';
+    const name = users ? users.name : '';
+    const telephone = users ? users.telephone : '';
+    const email = users ? users.email : '';
+    const adress = users ? users.adress : '';
+
     return (
       <div className="animated fadeIn">
         <Row className="justify-content-center">
           <Col xs="12" className="justify-content-center">
             <br />
-            <img style={bannerStyle} src={users.photo} alt="photo" />
+            <img style={bannerStyle} src={photo || ''} alt="photo" />
           </Col>
         </Row>
         <Row>
@@ -167,7 +173,7 @@ class Profile extends Component {
                     <FormGroup>
                       <Label>Name: </Label>
                       <Input
-                        value={users.name || ''}
+                        value={name || ''}
                         type="text"
                         onChange={(e) => this.setState({
                           users: {
@@ -182,7 +188,7 @@ class Profile extends Component {
                     <FormGroup>
                       <Label>Telephone: </Label>
                       <Input
-                        value={users.telephone || ''}
+                        value={telephone || ''}
                         type="text"
                         onChange={(e) => this.setState({
                           users: {
@@ -197,7 +203,7 @@ class Profile extends Component {
                     <FormGroup>
                       <Label>Email: </Label>
                       <Input
-                        value={users.email || ''}
+                        value={email || ''}
                         type="email"
                         onChange={(e) => this.setState({
                           users: {
@@ -212,7 +218,7 @@ class Profile extends Component {
                     <FormGroup>
                       <Label>Adress: </Label>
                       <Input
-                        value={users.adress || ''}
+                        value={adress || ''}
                         type="text"
                         onChange={(e) => this.setState({
                           users: {

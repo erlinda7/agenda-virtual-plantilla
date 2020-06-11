@@ -63,11 +63,14 @@ class DefaultLayout extends Component {
       fontSize: 14,
       textAlign: 'center'
     }
+
+    const photo = user ? user.photo : '';
+    const name = user ? user.name : '';
     return (
       <div className="app">
         <AppHeader fixed>
           <Suspense fallback={this.loading()}>
-            <DefaultHeader photo ={user.photo} {...this.props} />
+            <DefaultHeader photo={photo || ''} {...this.props} />
           </Suspense>
         </AppHeader>
         <div className="app-body">
@@ -75,8 +78,8 @@ class DefaultLayout extends Component {
           <AppSidebar fixed display="lg">
             <div>
               <br />
-              <img style={bannerStyle} src={user.photo || ''} alt="photo" className="rounded-circle" />
-              <p style={font}>{user.name || ''}</p>
+              <img style={bannerStyle} src={photo || ''} alt="photo" className="rounded-circle" />
+              <p style={font}>{name || ''}</p>
               <br />
               <hr />
             </div>
