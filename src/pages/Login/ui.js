@@ -57,7 +57,11 @@ const db = async (currentUser) => {
         const vincu = await firebase.functions().httpsCallable(
           `usersRequests/newUser?providerId=${providerId}&uid=${uid}&telephone=${telephone}`
         );
-        await vincu();
+        await vincu().then(result=>{
+          //
+        }).catch(error=>{
+          //
+        })
     }
     if (providerId === 'google.com') {
       await firebase
@@ -79,7 +83,11 @@ const db = async (currentUser) => {
       const vincu = await firebase.functions().httpsCallable(
         `usersRequests/newUser?providerId=${providerId}&uid=${uid}&email=${email}`
       );
-      await vincu();
+      await vincu().then(result=>{
+        //
+      }).catch(error=>{
+        //
+      })
     }
     window.location.assign('/');
   } else {

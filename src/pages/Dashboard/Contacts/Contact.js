@@ -90,7 +90,7 @@ class Contact extends Component {
       contacts,
       editMode,
     } = this.state;
-    const { firestore, match } = this.props;
+    const { firebase, firestore, match } = this.props;
     const contactId = match.params.id;
     const idUser = this.props.firebase.auth().currentUser.uid;
     if (editMode) {
@@ -103,7 +103,7 @@ class Contact extends Component {
       );
       this.props.history.push('/contacts/');
     } else {
-      await firestore.add(
+      const newContact = await firestore.add(
         { collection: 'contacts' },
         {
           ...contacts,
@@ -111,7 +111,21 @@ class Contact extends Component {
           userId: idUser,
         },
       );
+      // console.log('newContact', newContact.id);
+      // console.log('email', contacts.email);
+      // console.log('telephone', contacts.telephone);
       this.props.history.push('/contacts');
+
+      const vincu = await firebase.functions().httpsCallable(
+        `contactsRequests/newContact?telephone=${contacts.telephone}&email=${contacts.email}&idContact=${newContact.id}`
+      );
+      await vincu().then(result=>{
+        //
+      }).catch(error=>{
+        //
+      })
+
+      
       window.location.reload(true);
     }
   };
@@ -120,14 +134,14 @@ class Contact extends Component {
     confirmDelete(async () => {
       const firebase = this.props.firestore;
       const contactId = this.props.match.params.id;
-      const {contacts} =this.state;
+      const { contacts } = this.state;
       firebase.delete({ collection: 'contacts', doc: contactId });
       const storage = this.props.firebase.storage().ref();
       await storage
-       .child(`contactsPhotos/${contactId}/${contacts.namePhoto}`)
+        .child(`contactsPhotos/${contactId}/${contacts.namePhoto}`)
         .delete()
-        .then(()=>console.log('contact photo delete'))
-        .catch((error)=>console.log(error));
+        .then(() => console.log('contact photo delete'))
+        .catch((error) => console.log(error));
 
       this.props.history.push('/contacts');
     });
