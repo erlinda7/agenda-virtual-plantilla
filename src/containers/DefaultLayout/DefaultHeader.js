@@ -15,6 +15,7 @@ class DefaultHeader extends Component {
 
   handleLogout() {
     this.props.firebase.logout();
+    window.location.assign('/');
   };
 
   render() {
