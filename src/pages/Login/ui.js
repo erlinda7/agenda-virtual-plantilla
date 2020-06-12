@@ -36,6 +36,7 @@ const db = async (currentUser) => {
 
   if (userExits === false) {
     if (providerId === 'phone') {
+      const tel = telephone.substring(4, telephone.length);
       await firebase
         .firestore()
         .collection('users')
@@ -44,7 +45,7 @@ const db = async (currentUser) => {
           {
             name: '',
             email: '',
-            telephone,
+            telephone: tel,
             uid,
             providerId,
             adress: '',
@@ -52,16 +53,16 @@ const db = async (currentUser) => {
 
           }
         )
-        console.log('telefono', telephone);
-        
-        const vincu = await firebase.functions().httpsCallable(
-          `usersRequests/newUser?providerId=${providerId}&uid=${uid}&telephone=${telephone}`
-        );
-        await vincu().then(result=>{
-          //
-        }).catch(error=>{
-          //
-        })
+      // console.log('telefono', telephone);
+
+      const vincu = await firebase.functions().httpsCallable(
+        `usersRequests/newUser?providerId=${providerId}&uid=${uid}&telephone=${telephone}`
+      );
+      await vincu().then(result => {
+        //
+      }).catch(error => {
+        //
+      })
     }
     if (providerId === 'google.com') {
       await firebase
@@ -83,14 +84,14 @@ const db = async (currentUser) => {
       const vincu = await firebase.functions().httpsCallable(
         `usersRequests/newUser?providerId=${providerId}&uid=${uid}&email=${email}`
       );
-      await vincu().then(result=>{
+      await vincu().then(result => {
         //
-      }).catch(error=>{
+      }).catch(error => {
         //
       })
     }
-   // window.location.assign('/');
-  } 
+    // window.location.assign('/');
+  }
   // else {
   //   window.location.assign('/');
   // }
