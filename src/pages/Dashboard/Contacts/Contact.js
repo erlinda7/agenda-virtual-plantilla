@@ -119,13 +119,13 @@ class Contact extends Component {
       const vincu = await firebase.functions().httpsCallable(
         `contactsRequests/newContact?telephone=${contacts.telephone}&email=${contacts.email}&idContact=${newContact.id}`
       );
-      await vincu().then(result=>{
+      await vincu().then(result => {
         //
-      }).catch(error=>{
+      }).catch(error => {
         //
       })
 
-      
+
       window.location.reload(true);
     }
   };
@@ -225,6 +225,7 @@ class Contact extends Component {
                     <FormGroup>
                       <Label>Telephone: </Label>
                       <Input
+                        disabled={contacts.vinculed}
                         value={contacts.telephone || ''}
                         type="text"
                         onChange={(e) => this.setState({
@@ -240,6 +241,7 @@ class Contact extends Component {
                     <FormGroup>
                       <Label>Email: </Label>
                       <Input
+                        disabled={contacts.vinculed}
                         value={contacts.email || ''}
                         type="email"
                         onChange={(e) => this.setState({
@@ -255,6 +257,7 @@ class Contact extends Component {
                     <FormGroup>
                       <Label>Adress: </Label>
                       <Input
+                        disabled={contacts.vinculed}
                         value={contacts.adress || ''}
                         type="text"
                         onChange={(e) => this.setState({

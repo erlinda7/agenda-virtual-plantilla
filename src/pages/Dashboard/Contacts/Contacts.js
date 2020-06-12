@@ -46,13 +46,13 @@ class Contacts extends Component {
         let user = users.filter(i => i.uid === item.vinculed);
         if (user.length !== 0) {
           const aux = {
-            id:item.id,
+            id: item.id,
             adress: user[0].adress,
             email: user[0].email,
-            name:user[0].name,
+            name: item.name,
             photo: user[0].photo,
             telephone: user[0].telephone,
-            userId:item.userId,
+            userId: item.userId,
             vinculed: item.vinculed,
           }
           listContacts.push(aux);
