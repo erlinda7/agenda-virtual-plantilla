@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/alt-text */
 import React, { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import {
@@ -17,10 +18,11 @@ const HeaderNav = (props) => {
     <div >
       <Navbar color="light" light expand="md">
         <NavbarToggler onClick={toggle} />
+        <img src="../../assets/img/contacto.png" />
         <Collapse isOpen={isOpen} navbar>
           <Nav className=" navbar-nav ml-auto" navbar>
-            <NavItem>
-              <NavLink to="/login">Log In</NavLink>
+            <NavItem >
+              <NavLink style={{ textDecoration: 'none' }} to="/login"><b>Log In</b></NavLink>
             </NavItem>
           </Nav>
         </Collapse>

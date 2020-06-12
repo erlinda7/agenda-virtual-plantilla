@@ -1,14 +1,11 @@
 import React, { Component } from 'react';
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
-// import { renderRoutes } from 'react-router-config';
 import './App.scss';
 
 
 import Login from './pages/Login/Login';
 import Home from './containers/Home/Home';
-// import VirtualAgenda from './containers/AgendaVirtual/VirtualAgenda';
-// import Contact from './pages/Dashboard/Contacts/Contact';
 
 const loading = () => <div className="animated fadeIn pt-3 text-center">Loading...</div>;
 
@@ -34,12 +31,9 @@ class App extends Component {
               <Switch>
                 <Route exact path="/" render={props => <Home {...props} />} />
                 <Route exact path="/login" render={props => <Login {...props} />} />
+                <Redirect from="/" to="/" />
               </Switch>
               :
-              // <Switch>
-              //   <Route exact path="/" render={props => <VirtualAgenda {...props} />} />
-              //   <Route path="/contacts/:id" render={props => <Contact {...props} />} />
-              // </Switch>
               <Switch>
                 <Route exact path="/404" name="Page 404" render={props => <Page404 {...props} />} />
                 <Route exact path="/500" name="Page 500" render={props => <Page500 {...props} />} />
@@ -52,8 +46,6 @@ class App extends Component {
     );
   }
 }
-
-//export default App;
 
 function mapStateToProps(state) {
   return {
