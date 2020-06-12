@@ -1,12 +1,16 @@
 import React from "react";
 import HeaderNav from './HeaderNav';
+import Carrusel from "./Carrusel";
+import FooterHome from "./FooterHome";
 
 class Page extends React.Component {
     render() {
         return (
-            <div >
+            <div  >
                 <HeaderNav />
-                <h1> Welcome</h1>
+                <Carrusel />
+                    <FooterHome />
+
             </div>
         )
     }

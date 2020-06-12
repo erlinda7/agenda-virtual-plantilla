@@ -22,7 +22,7 @@ const HeaderNav = (props) => {
         <Collapse isOpen={isOpen} navbar>
           <Nav className=" navbar-nav ml-auto" navbar>
             <NavItem >
-              <NavLink style={{ textDecoration: 'none' }} to="/login"><b>Log In</b></NavLink>
+              <NavLink style={{ textDecoration: 'none', fontSize: 18, fontWeight:'bold'}} to="/login">Log In </NavLink>
             </NavItem>
           </Nav>
         </Collapse>
