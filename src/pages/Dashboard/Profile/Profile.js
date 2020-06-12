@@ -189,6 +189,7 @@ class Profile extends Component {
                     <FormGroup>
                       <Label>Telephone: </Label>
                       <Input
+                        disabled={providerId === 'phone'}
                         value={telephone || ''}
                         type="text"
                         onChange={(e) => this.setState({
@@ -204,6 +205,7 @@ class Profile extends Component {
                     <FormGroup>
                       <Label>Email: </Label>
                       <Input
+                        disabled={providerId === 'google.com'}
                         value={email || ''}
                         type="email"
                         onChange={(e) => this.setState({
