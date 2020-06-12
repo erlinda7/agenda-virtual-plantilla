@@ -91,7 +91,7 @@ function TableContent({
         return (
           <td key={index}>
             {item[header.value] ? (
-              <img width="50px" src={item[header.value]} alt="" />
+              <img className="rounded-circle" width="50px" height="50px" src={item[header.value]} alt="" />
             ) : (
                 ''
               )}

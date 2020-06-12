@@ -75,7 +75,7 @@ class DefaultLayout extends Component {
         </AppHeader>
         <div className="app-body">
 
-          <AppSidebar fixed display="lg">
+          <AppSidebar fixed display="lg" className="main-sidebar">
             <div>
               <br />
               <img style={bannerStyle} src={photo || ''} alt="photo" className="rounded-circle" />
@@ -84,12 +84,12 @@ class DefaultLayout extends Component {
               <hr />
             </div>
             <AppSidebarHeader />
-            <AppSidebarForm />
+            <AppSidebarForm  />
             <Suspense>
               <AppSidebarNav navConfig={navigation} {...this.props} router={router} />
             </Suspense>
-            <AppSidebarFooter />
-            <AppSidebarMinimizer />
+            {/* <AppSidebarFooter />
+            <AppSidebarMinimizer /> */}
           </AppSidebar>
           <main className="main">
             <AppBreadcrumb appRoutes={routes} router={router} />

@@ -9,7 +9,7 @@ class Page extends React.Component {
             <div  >
                 <HeaderNav />
                 <Carrusel />
-                    <FooterHome />
+                <FooterHome />
 
             </div>
         )

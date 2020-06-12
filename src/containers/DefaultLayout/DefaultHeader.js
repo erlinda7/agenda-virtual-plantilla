@@ -35,7 +35,7 @@ class DefaultHeader extends Component {
 
           <UncontrolledDropdown nav direction="down">
             <DropdownToggle nav>
-              <img src={photo || ''} className="img-avatar" alt="admin@bootstrapmaster.com" />
+              <img src="../../assets/img/contacto.png" className="img-avatar" alt="admin@bootstrapmaster.com" />
             </DropdownToggle>
             <DropdownMenu right>
               <DropdownItem onClick={(e) => this.handleLogout()}>
