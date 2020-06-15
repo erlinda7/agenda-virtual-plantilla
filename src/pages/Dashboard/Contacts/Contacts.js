@@ -42,7 +42,7 @@ class Contacts extends Component {
 
     contacts.forEach(item => {
       if (item.vinculed) {
-        console.log('vinculed', item.vinculed);
+        //console.log('vinculed', item.vinculed);
         let user = users.filter(i => i.uid === item.vinculed);
         if (user.length !== 0) {
           const aux = {
@@ -62,6 +62,8 @@ class Contacts extends Component {
         listContacts.push(item);
       }
     })
+    //console.log('list', listContacts);
+    
     return listContacts;
 
   }

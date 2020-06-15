@@ -60,7 +60,7 @@ class Contacts extends Component {
     );
     let alert = { type: 'success', message: 'Contact were saved successfully' };
     this.setState({ alert, visibleAlert: true, editedList: false });
-   // window.location.reload(true);
+    // window.location.reload(true);
   }
 
   actionHandler(id, action) {
@@ -80,7 +80,7 @@ class Contacts extends Component {
     const contacts = this.props.contacts || [];
     const users = this.props.users || [];
     let listUserAggregates = []; //usuarios que me tienen agregado en sus contactos
-    
+
 
     let filterNoContacts = contacts.filter(item => item.userId !== uid); //que no estan en mis contactos
     let filterMyContacts = contacts.filter(item => item.userId === uid);
@@ -93,13 +93,13 @@ class Contacts extends Component {
           const userId = item.userId;
           const user = users.filter(item => item.uid === userId);
           if (user.length !== 0)
-            listUserAggregates.push(user[0]);    
+            listUserAggregates.push(user[0]);
         }
       })
-      
-      listUserAggregates.forEach(item=>{
-        let aux= filterMyContacts.filter(c=>c.email===item.email);
-        if(aux.length===0){
+
+      listUserAggregates.forEach(item => {
+        let aux = filterMyContacts.filter(c => c.email === item.email);
+        if (aux.length === 0) {
           listFinal.push(item);
         }
       })
@@ -107,9 +107,10 @@ class Contacts extends Component {
     }
 
     if (providerId === 'phone') {
+      const tel = currentUser.phoneNumber.substring(4, currentUser.phoneNumber.length);
       let listFinal = [];
       filterNoContacts.forEach(item => {
-        if (item.telephone === currentUser.phoneNumber) {
+        if (item.telephone === tel) {
           const userId = item.userId;
           const user = users.filter(item => item.uid === userId);
           if (user.length !== 0)
@@ -117,9 +118,9 @@ class Contacts extends Component {
         }
       })
 
-      listUserAggregates.forEach(item=>{
-        let aux= filterMyContacts.filter(c=>c.telephone===item.telephone);
-        if(aux.length===0){
+      listUserAggregates.forEach(item => {
+        let aux = filterMyContacts.filter(c => c.telephone === item.telephone);
+        if (aux.length === 0) {
           listFinal.push(item);
         }
       })
@@ -154,7 +155,7 @@ class Contacts extends Component {
       this.firstElement(),
       this.lastElement(),
     );
-    console.log('vvvvvv', filterUsers);
+    // console.log('vvvvvv', filterUsers);
 
     return (
       <div className="animated fadeIn">

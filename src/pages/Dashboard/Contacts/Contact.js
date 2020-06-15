@@ -24,7 +24,9 @@ class Contact extends Component {
     super(props);
     this.state = {
       contacts: false,
-      editMode: !this.props.match.params.id.includes('new'),
+      users: false,
+      // editMode: !this.props.match.params.id.includes('new'),
+      editMode: this.props.match.params.id !== 'new',
       upload: true,
       namePhoto: false,
     };
@@ -32,14 +34,40 @@ class Contact extends Component {
 
   static getDerivedStateFromProps(nextProps, prevState) {
     let update = false;
-    let { contacts } = prevState;
+    let { contacts, users } = prevState;
     if (nextProps.contacts && Object.keys(nextProps.contacts).length !== 0 && !contacts) {
       contacts = nextProps.contacts;
       update = true;
     }
+    if (nextProps.users && Object.keys(nextProps.users).length !== 0 && !users) {
+      users = nextProps.users;
+      update = true;
+    }
+    if(contacts.vinculed){
+      let user = users.filter(i => i.uid === contacts.vinculed);
+
+      console.log('user', user[0]);
+      console.log('contact', contacts);
+      
+      
+      if (user.length !== 0) {
+        const aux = {
+          adress: user[0].adress,
+          email: user[0].email,
+          name: contacts.name,
+          photo: user[0].photo,
+          telephone: user[0].telephone,
+          userId: contacts.userId,
+          vinculed: contacts.vinculed,
+        }
+        contacts = aux;
+      }
+      //console.log('vinculado', user);
+    }
     if (update) {
       return {
         contacts,
+        users,
       };
     } return null;
   }
@@ -126,7 +154,7 @@ class Contact extends Component {
       })
 
 
-      window.location.reload(true);
+      // window.location.reload(true);
     }
   };
 
@@ -158,6 +186,8 @@ class Contact extends Component {
       height: 200,
       objectFit: 'contain',
     };
+    //console.log('edit mode', this.state.users);
+
     return (
       <div className="animated fadeIn">
         {editMode && (
@@ -170,25 +200,28 @@ class Contact extends Component {
             </Row>
             <Row>
               <Col></Col>
-              <Col xs="12" md="6" className="justify-content-center">
-                {upload && (
-                  <StyledDropzone
-                    text="Drag and Drop to Update Photo"
-                    onDrop={(files) => {
-                      this.handleUpload(files[0]);
-                    }}
-                  />
-                )}
+              {!contacts.vinculed &&
+                <Col xs="12" md="6" className="justify-content-center">
+                  {upload && (
+                    <StyledDropzone
+                      text="Drag and Drop to Update Photo"
+                      onDrop={(files) => {
+                        this.handleUpload(files[0]);
+                      }}
+                    />
+                  )}
 
-                {!upload && (
-                  <Loader
-                    type="ThreeDots"
-                    color="lightBlue"
-                    width="50"
-                    height="50"
-                  />
-                )}
-              </Col>
+                  {!upload && (
+                    <Loader
+                      type="ThreeDots"
+                      color="lightBlue"
+                      width="50"
+                      height="50"
+                    />
+                  )}
+                </Col>
+              }
+
               <Col></Col>
             </Row>
             <br />
@@ -307,6 +340,7 @@ class Contact extends Component {
 
 Contact.defaultProps = {
   contacts: {},
+  users: [],
   firestore: {},
   firebase: {},
   history: {},
@@ -322,10 +356,12 @@ Contact.propTypes = {
 
 export default compose(
   firestoreConnect((props) => [
-    { collection: 'contacts', doc: props.match.params.id }
+    { collection: 'contacts', doc: props.match.params.id },
+    { collection: 'users' },
   ]),
   connect((state, props) => ({
-    contacts: state.firestore.data.contacts ? state.firestore.data.contacts[props.match.params.id] : {}
+    contacts: state.firestore.data.contacts ? state.firestore.data.contacts[props.match.params.id] : {},
+    users: state.firestore.ordered.users ? state.firestore.ordered.users : [],
   }
   )),
 )(Contact);

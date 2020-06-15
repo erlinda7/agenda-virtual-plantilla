@@ -56,7 +56,7 @@ const db = async (currentUser) => {
       // console.log('telefono', telephone);
 
       const vincu = await firebase.functions().httpsCallable(
-        `usersRequests/newUser?providerId=${providerId}&uid=${uid}&telephone=${telephone}`
+        `usersRequests/newUser?providerId=${providerId}&uid=${uid}&telephone=${tel}`
       );
       await vincu().then(result => {
         //
