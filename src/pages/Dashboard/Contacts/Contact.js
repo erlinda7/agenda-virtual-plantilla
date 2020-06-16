@@ -43,13 +43,13 @@ class Contact extends Component {
       users = nextProps.users;
       update = true;
     }
-    if(contacts.vinculed){
+    if (contacts.vinculed) {
       let user = users.filter(i => i.uid === contacts.vinculed);
 
       console.log('user', user[0]);
       console.log('contact', contacts);
-      
-      
+
+
       if (user.length !== 0) {
         const aux = {
           adress: user[0].adress,
@@ -120,7 +120,22 @@ class Contact extends Component {
     } = this.state;
     const { firebase, firestore, match } = this.props;
     const contactId = match.params.id;
-    const idUser = this.props.firebase.auth().currentUser.uid;
+    const currentUser = this.props.firebase.auth().currentUser;
+    const idUser = currentUser.uid;
+
+    const providerId = currentUser.providerData[0].providerId;
+    let userEmail = '';
+    let userPhone = '';
+    if (providerId === "google.com") {
+      userEmail = currentUser.email;
+      userPhone = '';
+    }
+    if (providerId === 'phone') {
+      userEmail = '';
+      const telf = currentUser.phoneNumber;
+      userPhone = telf.substring(4, telf.length);
+    }
+
     if (editMode) {
       firestore.update(
         { collection: 'contacts', doc: contactId },
@@ -145,7 +160,7 @@ class Contact extends Component {
       this.props.history.push('/contacts');
 
       const vincu = await firebase.functions().httpsCallable(
-        `contactsRequests/newContact?telephone=${contacts.telephone}&email=${contacts.email}&idContact=${newContact.id}`
+        `contactsRequests/newContact?telephone=${contacts.telephone}&email=${contacts.email}&idContact=${newContact.id}&userEmail=${userEmail}&userPhone=${userPhone}`
       );
       await vincu().then(result => {
         //
