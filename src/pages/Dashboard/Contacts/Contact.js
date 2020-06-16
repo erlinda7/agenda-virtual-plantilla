@@ -7,6 +7,7 @@ import PropTypes from 'prop-types';
 import Loader from 'react-loader-spinner';
 import { confirmDelete } from '../../../helper_functions/helperFunctions';
 import StyledDropzone from '../../../components/StyledDropzone';
+import { Link } from 'react-router-dom';
 import {
   Button,
   Card,
@@ -218,153 +219,173 @@ class Contact extends Component {
       height: 200,
       objectFit: 'contain',
     };
-    //console.log('edit mode', this.state.users);
+   // console.log('edit mode', this.state.contacts);
 
     return (
+
       <div className="animated fadeIn">
-        {editMode && (
+        {contacts ?
           <>
-            <Row className="justify-content-center">
-              <Col xs="12" className="justify-content-center">
-                <br />
-                <img style={bannerStyle} src={contacts.photo} alt="photo" />
-              </Col>
-            </Row>
-            <Row>
-              <Col></Col>
-              {!contacts.vinculed &&
-                <Col xs="12" md="6" className="justify-content-center">
-                  {upload && (
-                    <StyledDropzone
-                      text="Drag and Drop to Update Photo"
-                      onDrop={(files) => {
-                        this.handleUpload(files[0]);
-                      }}
-                    />
-                  )}
-
-                  {!upload && (
-                    <Loader
-                      type="ThreeDots"
-                      color="lightBlue"
-                      width="50"
-                      height="50"
-                    />
-                  )}
-                </Col>
-              }
-
-              <Col></Col>
-            </Row>
-            <br />
-          </>
-        )
-        }
-        <Row>
-          <Col >
-            <Card>
-              <CardHeader>
-                <strong>
-                  <i className="icon-info pr-1" />
-                  Contact Settings
-                </strong>
-              </CardHeader>
-              <CardBody>
-                <Row>
-                  <Col xs="12" md="6">
-                    <FormGroup>
-                      <Label>Name: </Label>
-                      <Input
-                        value={contacts.name || ''}
-                        type="text"
-                        onChange={(e) => this.setState({
-                          contacts: {
-                            ...contacts,
-                            name: e.target.value
-                          }
-                        })}
-                      />
-                    </FormGroup>
-                  </Col>
-                  <Col xs="12" md="6">
-                    <FormGroup>
-                      <Label>Telephone: </Label>
-                      <Input
-                        disabled={contacts.vinculed}
-                        value={contacts.telephone || ''}
-                        type="text"
-                        onChange={(e) => this.setState({
-                          contacts: {
-                            ...contacts,
-                            telephone: e.target.value
-                          }
-                        })}
-                      />
-                    </FormGroup>
-                  </Col>
-                  <Col xs="12" md="6">
-                    <FormGroup>
-                      <Label>Email: </Label>
-                      <Input
-                        disabled={contacts.vinculed}
-                        value={contacts.email || ''}
-                        type="email"
-                        onChange={(e) => this.setState({
-                          contacts: {
-                            ...contacts,
-                            email: e.target.value
-                          }
-                        })}
-                      />
-                    </FormGroup>
-                  </Col>
-                  <Col xs="12" md="6">
-                    <FormGroup>
-                      <Label>Adress: </Label>
-                      <Input
-                        disabled={contacts.vinculed}
-                        value={contacts.adress || ''}
-                        type="text"
-                        onChange={(e) => this.setState({
-                          contacts: {
-                            ...contacts,
-                            adress: e.target.value
-                          }
-                        })}
-                      />
-                    </FormGroup>
+            {editMode && (
+              <>
+                <Row className="justify-content-center">
+                  <Col xs="12" className="justify-content-center">
+                    <br />
+                    <img style={bannerStyle} src={contacts.photo} alt="photo" />
                   </Col>
                 </Row>
-              </CardBody>
-            </Card>
-          </Col>
-        </Row>
-        <br />
-        <Row className="justify-content-center">
-          <Button
-            className="button-update"
-            color="primary"
-            onClick={() => {
-              this.submit();
-            }}
-          >
-            Submit
+                <Row>
+                  <Col></Col>
+                  {!contacts.vinculed &&
+                    <Col xs="12" md="6" className="justify-content-center">
+                      {upload && (
+                        <StyledDropzone
+                          text="Drag and Drop to Update Photo"
+                          onDrop={(files) => {
+                            this.handleUpload(files[0]);
+                          }}
+                        />
+                      )}
+
+                      {!upload && (
+                        <Loader
+                          type="ThreeDots"
+                          color="lightBlue"
+                          width="50"
+                          height="50"
+                        />
+                      )}
+                    </Col>
+                  }
+
+                  <Col></Col>
+                </Row>
+                <br />
+              </>
+            )
+            }
+            <Row>
+              <Col >
+                <Card>
+                  <CardHeader>
+                    <strong>
+                      <i className="icon-info pr-1" />
+                  Contact Settings
+                </strong>
+                  </CardHeader>
+                  <CardBody>
+                    <Row>
+                      <Col xs="12" md="6">
+                        <FormGroup>
+                          <Label>Name: </Label>
+                          <Input
+                            value={contacts.name || ''}
+                            type="text"
+                            onChange={(e) => this.setState({
+                              contacts: {
+                                ...contacts,
+                                name: e.target.value
+                              }
+                            })}
+                          />
+                        </FormGroup>
+                      </Col>
+                      <Col xs="12" md="6">
+                        <FormGroup>
+                          <Label>Telephone: </Label>
+                          <Input
+                            disabled={contacts.vinculed}
+                            value={contacts.telephone || ''}
+                            type="text"
+                            onChange={(e) => this.setState({
+                              contacts: {
+                                ...contacts,
+                                telephone: e.target.value
+                              }
+                            })}
+                          />
+                        </FormGroup>
+                      </Col>
+                      <Col xs="12" md="6">
+                        <FormGroup>
+                          <Label>Email: </Label>
+                          <Input
+                            disabled={contacts.vinculed}
+                            value={contacts.email || ''}
+                            type="email"
+                            onChange={(e) => this.setState({
+                              contacts: {
+                                ...contacts,
+                                email: e.target.value
+                              }
+                            })}
+                          />
+                        </FormGroup>
+                      </Col>
+                      <Col xs="12" md="6">
+                        <FormGroup>
+                          <Label>Adress: </Label>
+                          <Input
+                            disabled={contacts.vinculed}
+                            value={contacts.adress || ''}
+                            type="text"
+                            onChange={(e) => this.setState({
+                              contacts: {
+                                ...contacts,
+                                adress: e.target.value
+                              }
+                            })}
+                          />
+                        </FormGroup>
+                      </Col>
+                    </Row>
+                  </CardBody>
+                </Card>
+              </Col>
+            </Row>
+            <br />
+            <Row className="justify-content-center">
+              <Button
+                className="button-update"
+                color="primary"
+                onClick={() => {
+                  this.submit();
+                }}
+              >
+                Submit
           </Button>
           &nbsp;
           <Button
-            color="secondary"
-            onClick={() => this.props.history.push('/contacts/')}
-          >
-            Cancel
+                color="secondary"
+                onClick={() => this.props.history.push('/contacts/')}
+              >
+                Cancel
           </Button>
           &nbsp;
           {editMode && (
-            <Button color="danger" onClick={() => this.deleteContact()}>
-              Delete
-            </Button>
-          )}
-        </Row>
-        <br />
+                <Button color="danger" onClick={() => this.deleteContact()}>
+                  Delete
+                </Button>
+              )}
+            </Row>
+            <br />
+          </>
+          :
+          <center>
+            <br />
+            <br />
+            <br />
+            <br />
+            <p><b>The contact does not exist</b></p>
+            <Button
+                color="secondary"
+                onClick={() => this.props.history.push('/contacts/')}
+              >
+                Go Contacts
+          </Button>
+          </center>
+        }
+
       </div>
     );
   }
@@ -380,7 +401,7 @@ Contact.defaultProps = {
 };
 Contact.propTypes = {
   contacts: PropTypes.shape(),
-  history: PropTypes.func,
+  history: PropTypes.objectOf(PropTypes.any).isRequired,
   match: PropTypes.func,
   firestore: PropTypes.shape(),
   firebase: PropTypes.shape(),

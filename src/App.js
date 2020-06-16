@@ -31,7 +31,7 @@ class App extends Component {
               <Switch>
                 <Route exact path="/" render={props => <Home {...props} />} />
                 <Route exact path="/login" render={props => <Login {...props} />} />
-                <Redirect from="/" to="/" />
+                {/* <Redirect from="/" to="/" /> */}
               </Switch>
               :
               <Switch>
