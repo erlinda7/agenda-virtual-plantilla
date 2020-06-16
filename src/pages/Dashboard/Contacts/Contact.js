@@ -46,8 +46,8 @@ class Contact extends Component {
     if (contacts.vinculed) {
       let user = users.filter(i => i.uid === contacts.vinculed);
 
-      console.log('user', user[0]);
-      console.log('contact', contacts);
+      // console.log('user', user[0]);
+      // console.log('contact', contacts);
 
 
       if (user.length !== 0) {
@@ -152,6 +152,7 @@ class Contact extends Component {
           ...contacts,
           photo: "https://firebasestorage.googleapis.com/v0/b/agendavirtual-f818c.appspot.com/o/photoDefault%2Fphoto_.jpg?alt=media&token=7521d6fb-f361-4b1f-b221-313d5e310aaa",
           userId: idUser,
+          show: true,
         },
       );
       // console.log('newContact', newContact.id);
@@ -175,16 +176,32 @@ class Contact extends Component {
 
   deleteContact() {
     confirmDelete(async () => {
-      const firebase = this.props.firestore;
+      const firestore = this.props.firestore;
       const contactId = this.props.match.params.id;
       const { contacts } = this.state;
-      firebase.delete({ collection: 'contacts', doc: contactId });
-      const storage = this.props.firebase.storage().ref();
-      await storage
-        .child(`contactsPhotos/${contactId}/${contacts.namePhoto}`)
-        .delete()
-        .then(() => console.log('contact photo delete'))
-        .catch((error) => console.log(error));
+      if (contacts.vinculed) {
+        firestore.update(
+          { collection: 'contacts', doc: contactId },
+          {
+            ...contacts,
+            show: false,
+          },
+        );
+      } else {
+        firestore.delete({ collection: 'contacts', doc: contactId });
+      }
+
+      //eliminar foto
+      const url = "https://firebasestorage.googleapis.com/v0/b/agendavirtual-f818c.appspot.com/o/photoDefault%2Fphoto_.jpg?alt=media&token=7521d6fb-f361-4b1f-b221-313d5e310aaa";
+
+      if (contacts.photo !== url) {
+        const storage = this.props.firebase.storage().ref();
+        await storage
+          .child(`contactsPhotos/${contactId}/${contacts.namePhoto}`)
+          .delete()
+          .then(() => console.log('contact photo delete'))
+          .catch((error) => console.log(error));
+      }
 
       this.props.history.push('/contacts');
     });

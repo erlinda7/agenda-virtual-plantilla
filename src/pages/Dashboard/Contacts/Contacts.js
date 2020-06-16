@@ -167,7 +167,7 @@ Contacts.defaultProps = {
 };
 export default compose(
   firestoreConnect(() => [
-    { collection: 'contacts' },
+    { collection: 'contacts',  where: ["show", "==", true] },
     { collection: 'users' },
   ]),
   connect((state) => ({
