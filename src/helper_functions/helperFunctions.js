@@ -19,3 +19,21 @@ export function confirmDelete(callback) {
       ],
     });
   }
+
+  export function confirmBlocked(callback) {
+    return confirmAlert({
+      title: 'Are you sure you want to blocked?',
+      message: 'This cannot be reverted',
+      buttons: [
+        {
+          label: "Yes, I'm sure!",
+          onClick: () => {
+            callback();
+          },
+        },
+        {
+          label: 'Cancel',
+        },
+      ],
+    });
+  }

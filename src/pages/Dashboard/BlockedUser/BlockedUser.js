@@ -38,97 +38,53 @@ class BlockedUser extends Component {
 
   onDismiss = () => this.setState({ visibleAlert: false });
 
-  async addContact(id) {
-    const { users, firestore } = this.props;
-    const user = users.filter(item => item.id === id);
-    const userId = this.props.firebase.auth().currentUser.uid;
-    // console.log('idUser', userId);
-    // console.log('vinculed', id)
-    // console.log('user add', user);
+  // async unlock(id) {
+  //desbloquear
+  // }
 
-    await firestore.add(
-      { collection: 'contacts' },
-      {
-        adress: user[0].adress,
-        email: user[0].email,
-        name: user[0].name,
-        photo: user[0].photo,
-        telephone: user[0].telephone,
-        userId: userId,
-        vinculed: id,
-      },
-    );
-    let alert = { type: 'success', message: 'Contact were saved successfully' };
-    this.setState({ alert, visibleAlert: true, editedList: false });
-    // window.location.reload(true);
-  }
-
-  actionHandler(id, action) {
-    switch (action) {
-      case 'add_action':
-        this.addContact(id);
-        break;
-      default: console.log('undefined action... =(');
-        break;
-    }
-  }
+  // actionHandler(id, action) {
+  //   switch (action) {
+  //     case 'add_action':
+  //       this.unlock(id);
+  //       break;
+  //     default: console.log('undefined action... =(');
+  //       break;
+  //   }
+  // }
 
   listUser() {
-    const { currentUser } = this.props.firebase.auth()
-    const uid = currentUser.uid;
-    const providerId = currentUser.providerData[0].providerId;
-    const contacts = this.props.contacts || [];
     const users = this.props.users || [];
-    let listUserAggregates = []; //usuarios que me tienen agregado en sus contactos
-
-
-    let filterNoContacts = contacts.filter(item => item.userId !== uid); //que no estan en mis contactos
-    let filterMyContacts = contacts.filter(item => item.userId === uid);
-
-
-    if (providerId === 'google.com') {
-      let listFinal = []; //los que me tienen agregados que no esten en mis contactos
-      filterNoContacts.forEach(item => {
-        if (item.email === currentUser.email) {
-          const userId = item.userId;
-          const user = users.filter(item => item.uid === userId);
-          if (user.length !== 0)
-            listUserAggregates.push(user[0]);
+    const blockeds = this.props.blockeds || [];
+    let listFinal = [];
+    blockeds.forEach(item => {
+      if (item.idUser) {
+        const user = users.filter(u => u.uid === item.idUser);
+        if (user.length !== 0) {
+          const aux = {
+            id: item.id,
+            photo: user[0].photo,
+            name: user[0].name,
+            telephone: user[0].telephone,
+            email: user[0].email,
+          }
+          listFinal.push(aux);
         }
-      })
 
-      listUserAggregates.forEach(item => {
-        let aux = filterMyContacts.filter(c => c.email === item.email);
-        if (aux.length === 0) {
-          listFinal.push(item);
+      } else {
+        const aux = {
+          id: item.id,
+          photo: item.photo,
+          name: item.name,
+          telephone: item.telephone,
+          email: item.email,
         }
-      })
-      return listFinal;
-    }
-
-    if (providerId === 'phone') {
-      const tel = currentUser.phoneNumber.substring(4, currentUser.phoneNumber.length);
-      let listFinal = [];
-      filterNoContacts.forEach(item => {
-        if (item.telephone === tel) {
-          const userId = item.userId;
-          const user = users.filter(item => item.uid === userId);
-          if (user.length !== 0)
-            listUserAggregates.push(user[0]);
-        }
-      })
-
-      listUserAggregates.forEach(item => {
-        let aux = filterMyContacts.filter(c => c.telephone === item.telephone);
-        if (aux.length === 0) {
-          listFinal.push(item);
-        }
-      })
-      return listFinal;
-    }
+        listFinal.push(aux);
+      }
+    })
+    return listFinal;
   }
 
-  filterUsers() {
+  filterBlockeds() {
     let str = this.state.filterText;
     let filtered = this.listUser() || [];
 
@@ -151,11 +107,11 @@ class BlockedUser extends Component {
   render() {
 
     const { visibleAlert, alert } = this.state;
-    const filterUsers = this.filterUsers().slice(
+    const filterBlockeds = this.filterBlockeds().slice(
       this.firstElement(),
       this.lastElement(),
     );
-    // console.log('vvvvvv', filterUsers);
+    console.log('blockeds', filterBlockeds);
 
     return (
       <div className="animated fadeIn">
@@ -174,7 +130,7 @@ class BlockedUser extends Component {
               <CardHeader>
                 <i className="fa fa-align-justify" />
                 {' '}
-                List of users who have you added
+                List of blocked users
               </CardHeader>
               <CardBody>
 
@@ -195,18 +151,17 @@ class BlockedUser extends Component {
                     { value: 'name', label: 'Name' },
                     { value: 'telephone', label: 'Telephone' },
                     { value: 'email', label: 'Email' },
-                    { label: 'Action', type: 'add-button' },
+                    // { label: 'Action', type: 'add-button' },
                   ]}
-                  content={filterUsers}
-                  //onClick={(item) => this.props.history.push(`/listUser/${item.id}`)}
-                  onClick={(item, action) => this.actionHandler(item.id, action)}
+                  content={filterBlockeds}
+                // onClick={(item, action) => this.actionHandler(item.id, action)}
                 />
                 <ReactPaginate
                   previousLabel="previous"
                   nextLabel="next"
                   breakLabel="..."
                   breakClassName="break-me"
-                  pageCount={Math.ceil(this.filterUsers().length / pageSize)}
+                  pageCount={Math.ceil(this.filterBlockeds().length / pageSize)}
                   marginPagesDisplayed={2}
                   pageRangeDisplayed={5}
                   onPageChange={(page) => this.setState({ currentPage: page.selected })}
@@ -224,22 +179,22 @@ class BlockedUser extends Component {
 }
 
 BlockedUser.propTypes = {
-  contacts: PropTypes.arrayOf(PropTypes.oneOfType([PropTypes.any])),
   users: PropTypes.arrayOf(PropTypes.oneOfType([PropTypes.any])),
+  blockeds: PropTypes.arrayOf(PropTypes.oneOfType([PropTypes.any])),
   history: PropTypes.objectOf(PropTypes.oneOfType(PropTypes.any)).isRequired,
   firebase: PropTypes.objectOf(PropTypes.oneOfType(PropTypes.any)).isRequired,
 };
 BlockedUser.defaultProps = {
-  contacts: [],
   users: [],
+  blockeds: [],
 };
 export default compose(
-  firestoreConnect(() => [
-    { collection: 'contacts' },
+  firestoreConnect((props) => [
     { collection: 'users' },
+    { collection: 'blockeds', where: ["blocked_by", "==", props.firebase.auth().currentUser.uid] },
   ]),
   connect((state) => ({
-    contacts: state.firestore.ordered.contacts ? state.firestore.ordered.contacts : [],
     users: state.firestore.ordered.users ? state.firestore.ordered.users : [],
+    blockeds: state.firestore.ordered.blockeds ? state.firestore.ordered.blockeds : [],
   })),
 )(BlockedUser);

@@ -5,7 +5,7 @@ import { firestoreConnect } from 'react-redux-firebase';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import Loader from 'react-loader-spinner';
-import { confirmDelete } from '../../../helper_functions/helperFunctions';
+import { confirmDelete, confirmBlocked } from '../../../helper_functions/helperFunctions';
 import StyledDropzone from '../../../components/StyledDropzone';
 import { Link } from 'react-router-dom';
 import {
@@ -160,7 +160,7 @@ class Contact extends Component {
       // console.log('newContact', newContact.id);
       // console.log('email', contacts.email);
       // console.log('telephone', contacts.telephone);
-      this.props.history.push('/contacts');
+
 
       const vincu = await firebase.functions().httpsCallable(
         `contactsRequests/newContact?telephone=${contacts.telephone}&email=${contacts.email}&idContact=${newContact.id}&userEmail=${userEmail}&userPhone=${userPhone}`
@@ -171,10 +171,25 @@ class Contact extends Component {
         //
       })
 
-
+      this.props.history.push('/contacts');
       // window.location.reload(true);
     }
   };
+
+  async deletePhoto() {
+    const { contacts } = this.state;
+    const contactId = this.props.match.params.id;
+    const url = "https://firebasestorage.googleapis.com/v0/b/agendavirtual-f818c.appspot.com/o/photoDefault%2Fphoto_.jpg?alt=media&token=7521d6fb-f361-4b1f-b221-313d5e310aaa";
+
+    if (contacts.photo !== url) {
+      const storage = this.props.firebase.storage().ref();
+      await storage
+        .child(`contactsPhotos/${contactId}/${contacts.namePhoto}`)
+        .delete()
+        .then(() => console.log('contact photo delete'))
+        .catch((error) => console.log(error));
+    }
+  }
 
   deleteContact() {
     confirmDelete(async () => {
@@ -192,22 +207,46 @@ class Contact extends Component {
       } else {
         firestore.delete({ collection: 'contacts', doc: contactId });
       }
-
-      //eliminar foto
-      const url = "https://firebasestorage.googleapis.com/v0/b/agendavirtual-f818c.appspot.com/o/photoDefault%2Fphoto_.jpg?alt=media&token=7521d6fb-f361-4b1f-b221-313d5e310aaa";
-
-      if (contacts.photo !== url) {
-        const storage = this.props.firebase.storage().ref();
-        await storage
-          .child(`contactsPhotos/${contactId}/${contacts.namePhoto}`)
-          .delete()
-          .then(() => console.log('contact photo delete'))
-          .catch((error) => console.log(error));
-      }
-
+      await this.deletePhoto();
       this.props.history.push('/contacts');
     });
   }
+
+  blockContact() {
+    confirmBlocked(async () => {
+      console.log('idContacts', this.props.match.params.id);
+
+      console.log('bloqueado', this.state.contacts);
+      const { contacts } = this.state;
+      const { firebase, firestore, match } = this.props;
+      const uid = firebase.auth().currentUser.uid;
+      const contactId = this.props.match.params.id;
+
+      if (contacts.vinculed) {
+        console.log('vinculado');
+
+      } else {
+        console.log('no vinculado');
+        //agregar a la lista de bloqueados
+        await firestore.add(
+          { collection: 'blockeds' },
+          {
+            photo: "https://firebasestorage.googleapis.com/v0/b/agendavirtual-f818c.appspot.com/o/photoDefault%2Fphoto_.jpg?alt=media&token=7521d6fb-f361-4b1f-b221-313d5e310aaa",
+            name: contacts.name,
+            email: contacts.email,
+            telephone: contacts.telephone,
+            blocked_by: uid,
+            created: new Date(),
+          },
+        );
+        //eliminar de mis contactos
+        firestore.delete({ collection: 'contacts', doc: contactId });
+        await this.deletePhoto();
+        this.props.history.push('/contacts');
+      }
+    })
+  }
+
   render() {
     const {
       contacts,
@@ -220,7 +259,7 @@ class Contact extends Component {
       height: 200,
       objectFit: 'contain',
     };
-    // console.log('edit mode', this.state.contacts);
+    //console.log('contact', this.state.contacts);
 
     return (
 
@@ -354,18 +393,24 @@ class Contact extends Component {
                 }}
               >
                 Submit
-          </Button>
-          &nbsp;
-          <Button
+              </Button>
+                &nbsp;
+                <Button
                 color="secondary"
                 onClick={() => this.props.history.push('/contacts/')}
               >
                 Cancel
-          </Button>
-          &nbsp;
-          {editMode && (
+              </Button>
+              &nbsp;
+              {editMode && (
                 <Button color="danger" onClick={() => this.deleteContact()}>
                   Delete
+                </Button>
+              )}
+              &nbsp;
+              {editMode && (
+                <Button color="warning" onClick={() => this.blockContact()}>
+                  Block
                 </Button>
               )}
             </Row>
