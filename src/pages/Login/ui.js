@@ -50,7 +50,7 @@ const db = async (currentUser) => {
             providerId,
             adress: '',
             photo: "https://firebasestorage.googleapis.com/v0/b/agendavirtual-f818c.appspot.com/o/photoDefault%2Fphoto_.jpg?alt=media&token=7521d6fb-f361-4b1f-b221-313d5e310aaa",
-
+            created: new Date(),
           }
         )
       // console.log('telefono', telephone);
@@ -78,6 +78,7 @@ const db = async (currentUser) => {
             providerId,
             adress: '',
             photo: "https://firebasestorage.googleapis.com/v0/b/agendavirtual-f818c.appspot.com/o/photoDefault%2Fphoto_.jpg?alt=media&token=7521d6fb-f361-4b1f-b221-313d5e310aaa",
+            created: new Date(),
           }
         )
 

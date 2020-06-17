@@ -154,6 +154,7 @@ class Contact extends Component {
           photo: "https://firebasestorage.googleapis.com/v0/b/agendavirtual-f818c.appspot.com/o/photoDefault%2Fphoto_.jpg?alt=media&token=7521d6fb-f361-4b1f-b221-313d5e310aaa",
           userId: idUser,
           show: true,
+          created: new Date(),
         },
       );
       // console.log('newContact', newContact.id);
@@ -219,12 +220,12 @@ class Contact extends Component {
       height: 200,
       objectFit: 'contain',
     };
-   // console.log('edit mode', this.state.contacts);
+    // console.log('edit mode', this.state.contacts);
 
     return (
 
       <div className="animated fadeIn">
-        {contacts ?
+        {contacts || !editMode ?
           <>
             {editMode && (
               <>
@@ -378,10 +379,10 @@ class Contact extends Component {
             <br />
             <p><b>The contact does not exist</b></p>
             <Button
-                color="secondary"
-                onClick={() => this.props.history.push('/contacts/')}
-              >
-                Go Contacts
+              color="secondary"
+              onClick={() => this.props.history.push('/contacts/')}
+            >
+              Go Contacts
           </Button>
           </center>
         }

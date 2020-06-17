@@ -21,7 +21,7 @@ import '../../../styles/pagination.css';
 
 const pageSize = 20;
 
-class Contacts extends Component {
+class ListUser extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -223,13 +223,13 @@ class Contacts extends Component {
   }
 }
 
-Contacts.propTypes = {
+ListUser.propTypes = {
   contacts: PropTypes.arrayOf(PropTypes.oneOfType([PropTypes.any])),
   users: PropTypes.arrayOf(PropTypes.oneOfType([PropTypes.any])),
   history: PropTypes.objectOf(PropTypes.oneOfType(PropTypes.any)).isRequired,
   firebase: PropTypes.objectOf(PropTypes.oneOfType(PropTypes.any)).isRequired,
 };
-Contacts.defaultProps = {
+ListUser.defaultProps = {
   contacts: [],
   users: [],
 };
@@ -242,4 +242,4 @@ export default compose(
     contacts: state.firestore.ordered.contacts ? state.firestore.ordered.contacts : [],
     users: state.firestore.ordered.users ? state.firestore.ordered.users : [],
   })),
-)(Contacts);
+)(ListUser);
