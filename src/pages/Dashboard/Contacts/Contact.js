@@ -220,14 +220,25 @@ class Contact extends Component {
       const { contacts } = this.state;
       const { firebase, firestore, match } = this.props;
       const uid = firebase.auth().currentUser.uid;
-      const contactId = this.props.match.params.id;
+      const contactId = match.params.id;
 
       if (contacts.vinculed) {
-        console.log('vinculado');
+        //agregar a la lista de bloqueados, cuando esta vinculado el contacto
+        await firestore.add(
+          { collection: 'blockeds' },
+          {
+            idUser: contacts.vinculed,
+            blocked_by: uid,
+            created: new Date(),
+          },
+        );
+        //eliminar de mis contactos
+        firestore.delete({ collection: 'contacts', doc: contactId });
+        await this.deletePhoto();
+        this.props.history.push('/contacts');
 
       } else {
-        console.log('no vinculado');
-        //agregar a la lista de bloqueados
+        //agregar a la lista de bloqueados, cuando no esta vinculado el contacto
         await firestore.add(
           { collection: 'blockeds' },
           {
@@ -403,14 +414,14 @@ class Contact extends Component {
               </Button>
               &nbsp;
               {editMode && (
-                <Button color="danger" onClick={() => this.deleteContact()}>
-                  Delete
+                <Button color="warning" onClick={() => this.blockContact()}>
+                  Block
                 </Button>
               )}
               &nbsp;
               {editMode && (
-                <Button color="warning" onClick={() => this.blockContact()}>
-                  Block
+                <Button color="danger" onClick={() => this.deleteContact()}>
+                  Delete
                 </Button>
               )}
             </Row>
