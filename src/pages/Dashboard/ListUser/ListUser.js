@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import { confirmDelete, confirmBlocked } from '../../../helper_functions/helperFunctions';
 import {
   Button,
   Card,
@@ -56,6 +57,7 @@ class ListUser extends Component {
         telephone: user[0].telephone,
         userId: userId,
         vinculed: id,
+        show: true,
       },
     );
     let alert = { type: 'success', message: 'Contact were saved successfully' };
@@ -63,10 +65,74 @@ class ListUser extends Component {
     // window.location.reload(true);
   }
 
+  blockUser(id) {
+    confirmBlocked(async () => {
+      const users = this.props.users || [];
+      const contacts = this.props.contacts || [];
+      const { firebase, firestore } = this.props;
+      const currentUser = firebase.auth().currentUser;
+      const uid = currentUser.uid;
+      const providerId = currentUser.providerData[0].providerId;
+      let loggedUser = {};
+      let contact = {};
+      ///user logged
+      const userCurrent = users.filter(item => item.uid === uid);
+      if (userCurrent.length !== 0) {
+        loggedUser = userCurrent[0];
+      }
+
+      //mi contacto en los contactos del usuario a bloquear
+      const contactUser = contacts.filter(item => (item.userId === id));//los contactos del usuario a bloquear
+      if (contactUser.length !== 0) {
+        if (providerId === 'google.com') {
+          const aux = contactUser.filter(item => item.email === loggedUser.email);
+          contact = aux[0];
+        }
+        if (providerId === 'phone') {
+          const aux = contactUser.filter(item => item.telephone === loggedUser.telephone);
+          contact = aux[0];
+        }
+      }
+
+      //quien se creo primero el user o contact
+      if (contact.created.seconds < loggedUser.created.seconds) {
+        //primero el contacto y luego el usuario
+        await firestore.update(
+          { collection: 'contacts', doc: contact.id },
+          {
+            vinculed: firestore.FieldValue.delete()
+          },
+        );
+
+      } else {
+        //primero se creo el usuario y luego el contacto
+        await firestore.update(
+          { collection: 'contacts', doc: contact.id },
+          {
+            userDeleted: true,
+          },
+        );
+      }
+
+      //agregar a la lista de bloqueados
+      await firestore.add(
+        { collection: 'blockeds' },
+        {
+          idUser: id,
+          blocked_by: uid,
+          created: new Date(),
+        },
+      );
+    })
+  }
+
   actionHandler(id, action) {
     switch (action) {
       case 'add_action':
         this.addContact(id);
+        break;
+      case 'block_action':
+        this.blockUser(id);
         break;
       default: console.log('undefined action... =(');
         break;
@@ -195,7 +261,8 @@ class ListUser extends Component {
                     { value: 'name', label: 'Name' },
                     { value: 'telephone', label: 'Telephone' },
                     { value: 'email', label: 'Email' },
-                    { label: 'Action', type: 'add-button' },
+                    { label: 'Add Contact', type: 'add-button' },
+                    { label: 'Block User', type: 'block-button' },
                   ]}
                   content={filterUsers}
                   //onClick={(item) => this.props.history.push(`/listUser/${item.id}`)}

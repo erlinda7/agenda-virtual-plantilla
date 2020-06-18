@@ -169,6 +169,20 @@ function TableContent({
           </td>
         );
       }
+
+      case TABLE_TYPE.blockButton: {
+        return (
+          <td key={index}>
+            <Button
+              color="warning"
+              onClick={() => onClick(item, 'block_action')}
+            >
+              Block User
+            </Button>
+          </td>
+        );
+      }
+
       default: {
         return <td key={index}>{item[header.value]}</td>;
       }

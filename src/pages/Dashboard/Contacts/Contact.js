@@ -160,8 +160,8 @@ class Contact extends Component {
       // console.log('newContact', newContact.id);
       // console.log('email', contacts.email);
       // console.log('telephone', contacts.telephone);
-
-
+      this.props.history.push('/contacts');
+      
       const vincu = await firebase.functions().httpsCallable(
         `contactsRequests/newContact?telephone=${contacts.telephone}&email=${contacts.email}&idContact=${newContact.id}&userEmail=${userEmail}&userPhone=${userPhone}`
       );
@@ -171,7 +171,7 @@ class Contact extends Component {
         //
       })
 
-      this.props.history.push('/contacts');
+      
       // window.location.reload(true);
     }
   };
