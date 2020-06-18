@@ -43,9 +43,6 @@ class ListUser extends Component {
     const { users, firestore } = this.props;
     const user = users.filter(item => item.id === id);
     const userId = this.props.firebase.auth().currentUser.uid;
-    // console.log('idUser', userId);
-    // console.log('vinculed', id)
-    // console.log('user add', user);
 
     await firestore.add(
       { collection: 'contacts' },
@@ -147,7 +144,7 @@ class ListUser extends Component {
     const contacts = this.props.contacts || [];
     const users = this.props.users || [];
     let listUserAggregates = []; //usuarios que me tienen agregado en sus contactos
-
+    const blockeds = this.props.blockeds || []; //todos mis bloqueados
 
     let filterNoContacts = contacts.filter(item => item.userId !== uid); //que no estan en mis contactos
     let filterMyContacts = contacts.filter(item => item.userId === uid);
@@ -170,7 +167,17 @@ class ListUser extends Component {
           listFinal.push(item);
         }
       })
-      return listFinal;
+
+      //listFinal tiene los usuarios que me tienen agregado, entonces debo verificar que no los tengo bloqueado
+      let listNoBlocked = [];
+      listFinal.forEach(item => {
+        const block = blockeds.filter(block => block.idUser === item.uid); //esta bloqueado
+        if (block.length === 0) {
+          listNoBlocked.push(item);
+        }
+      })
+
+      return listNoBlocked;
     }
 
     if (providerId === 'phone') {
@@ -191,7 +198,17 @@ class ListUser extends Component {
           listFinal.push(item);
         }
       })
-      return listFinal;
+
+      //listFinal tiene los usuarios que me tienen agregado, entonces debo verificar que no los tengo bloqueado
+      let listNoBlocked = [];
+      listFinal.forEach(item => {
+        const block = blockeds.filter(block => block.idUser === item.uid); //esta bloqueado
+        if (block.length === 0) {
+          listNoBlocked.push(item);
+        }
+      })
+
+      return listNoBlocked;
     }
   }
 
@@ -222,7 +239,7 @@ class ListUser extends Component {
       this.firstElement(),
       this.lastElement(),
     );
-    // console.log('vvvvvv', filterUsers);
+    //  console.log('mis bloqueados', this.props.blockeds);
 
     return (
       <div className="animated fadeIn">
@@ -300,14 +317,17 @@ ListUser.propTypes = {
 ListUser.defaultProps = {
   contacts: [],
   users: [],
+  blockeds: [],
 };
 export default compose(
-  firestoreConnect(() => [
+  firestoreConnect((props) => [
     { collection: 'contacts' },
     { collection: 'users' },
+    { collection: 'blockeds', where: ["blocked_by", "==", props.firebase.auth().currentUser.uid] }
   ]),
   connect((state) => ({
     contacts: state.firestore.ordered.contacts ? state.firestore.ordered.contacts : [],
     users: state.firestore.ordered.users ? state.firestore.ordered.users : [],
+    blockeds: state.firestore.ordered.blockeds ? state.firestore.ordered.blockeds : [],
   })),
 )(ListUser);

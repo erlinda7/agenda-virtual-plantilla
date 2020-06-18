@@ -128,7 +128,7 @@ class Contacts extends Component {
                     { value: 'telephone', label: 'Telephone' },
                     { value: 'email', label: 'Email' },
                     { value: 'vinculed', label: 'Vinculed', type: 'checkContent' },
-                     { value: "userDeleted", label: "User Deleted", type: "status" },
+                     { value: "userDeleted", label: "Status", type: "status" },
                     { label: 'See More', type: 'detail-button' },
                   ]}
                   content={filterContacts}
