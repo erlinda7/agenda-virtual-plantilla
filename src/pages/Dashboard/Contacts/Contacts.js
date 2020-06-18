@@ -42,7 +42,7 @@ class Contacts extends Component {
 
     contacts.forEach(item => {
       if (item.vinculed) {
-        //console.log('vinculed', item.vinculed);
+        // console.log('vinculed', item.vinculed);
         let user = users.filter(i => i.uid === item.vinculed);
         if (user.length !== 0) {
           const aux = {
@@ -63,7 +63,7 @@ class Contacts extends Component {
       }
     })
     //console.log('list', listContacts);
-    
+
     return listContacts;
 
   }
@@ -94,7 +94,7 @@ class Contacts extends Component {
       this.firstElement(),
       this.lastElement(),
     );
-
+    //    console.log('contact', this.props.contacts);
     return (
       <div className="animated fadeIn">
         <Row>
@@ -128,6 +128,7 @@ class Contacts extends Component {
                     { value: 'telephone', label: 'Telephone' },
                     { value: 'email', label: 'Email' },
                     { value: 'vinculed', label: 'Vinculed', type: 'checkContent' },
+                     { value: "userDeleted", label: "User Deleted", type: "status" },
                     { label: 'See More', type: 'detail-button' },
                   ]}
                   content={filterContacts}
@@ -167,7 +168,7 @@ Contacts.defaultProps = {
 };
 export default compose(
   firestoreConnect(() => [
-    { collection: 'contacts',  where: ["show", "==", true] },
+    { collection: 'contacts', where: ["show", "==", true] },
     { collection: 'users' },
   ]),
   connect((state) => ({

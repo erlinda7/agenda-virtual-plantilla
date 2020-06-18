@@ -191,7 +191,7 @@ class Profile extends Component {
                       <Input
                         disabled={providerId === 'phone'}
                         value={telephone || ''}
-                        type="text"
+                        type="number"
                         onChange={(e) => this.setState({
                           users: {
                             ...users,

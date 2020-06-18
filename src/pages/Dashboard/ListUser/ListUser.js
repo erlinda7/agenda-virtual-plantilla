@@ -109,7 +109,8 @@ class ListUser extends Component {
         await firestore.update(
           { collection: 'contacts', doc: contact.id },
           {
-            userDeleted: true,
+            vinculed: firestore.FieldValue.delete(),
+            userDeleted: 'User deleted',
           },
         );
       }

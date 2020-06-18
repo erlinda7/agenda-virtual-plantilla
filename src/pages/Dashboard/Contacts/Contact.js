@@ -270,7 +270,6 @@ class Contact extends Component {
       height: 200,
       objectFit: 'contain',
     };
-    //console.log('contact', this.state.contacts);
 
     return (
 
@@ -347,7 +346,7 @@ class Contact extends Component {
                           <Input
                             disabled={contacts.vinculed}
                             value={contacts.telephone || ''}
-                            type="text"
+                            type="number"
                             onChange={(e) => this.setState({
                               contacts: {
                                 ...contacts,

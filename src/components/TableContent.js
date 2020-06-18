@@ -128,7 +128,7 @@ function TableContent({
         return (
           <td key={index}>
             <Badge
-              color={item[header.value] === 'active' ? 'success' : 'secondary'}
+              color={item[header.value] === 'User deleted' ? 'danger' : 'secondary'}
             >
               {item[header.value]}
             </Badge>
