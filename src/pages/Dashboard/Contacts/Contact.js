@@ -60,6 +60,7 @@ class Contact extends Component {
           telephone: user[0].telephone,
           userId: contacts.userId,
           vinculed: contacts.vinculed,
+          created: contacts.created,
         }
         contacts = aux;
       }
@@ -153,7 +154,7 @@ class Contact extends Component {
           ...contacts,
           photo: "https://firebasestorage.googleapis.com/v0/b/agendavirtual-f818c.appspot.com/o/photoDefault%2Fphoto_.jpg?alt=media&token=7521d6fb-f361-4b1f-b221-313d5e310aaa",
           userId: idUser,
-          show: true,
+          //show: true,
           created: new Date(),
         },
       );
@@ -161,7 +162,7 @@ class Contact extends Component {
       // console.log('email', contacts.email);
       // console.log('telephone', contacts.telephone);
       this.props.history.push('/contacts');
-      
+
       const vincu = await firebase.functions().httpsCallable(
         `contactsRequests/newContact?telephone=${contacts.telephone}&email=${contacts.email}&idContact=${newContact.id}&userEmail=${userEmail}&userPhone=${userPhone}`
       );
@@ -171,7 +172,7 @@ class Contact extends Component {
         //
       })
 
-      
+
       // window.location.reload(true);
     }
   };
@@ -197,13 +198,25 @@ class Contact extends Component {
       const contactId = this.props.match.params.id;
       const { contacts } = this.state;
       if (contacts.vinculed) {
-        firestore.update(
-          { collection: 'contacts', doc: contactId },
+        // firestore.update(
+        //   { collection: 'contacts', doc: contactId },
+        //   {
+        //     ...contacts,
+        //     show: false,
+        //   },
+        // );
+
+        //console.log('contactss', contacts);
+
+        await firestore.add(
+          { collection: 'deletedContacts' },
           {
             ...contacts,
-            show: false,
+            deleted_at: new Date(),
           },
         );
+        firestore.delete({ collection: 'contacts', doc: contactId });
+
       } else {
         firestore.delete({ collection: 'contacts', doc: contactId });
       }

@@ -54,7 +54,7 @@ class ListUser extends Component {
         telephone: user[0].telephone,
         userId: userId,
         vinculed: id,
-        show: true,
+        //show: true,
       },
     );
     let alert = { type: 'success', message: 'Contact were saved successfully' };
@@ -168,6 +168,9 @@ class ListUser extends Component {
         }
       })
 
+      
+      console.log('listFinal', listFinal);
+
       //listFinal tiene los usuarios que me tienen agregado, entonces debo verificar que no los tengo bloqueado
       let listNoBlocked = [];
       listFinal.forEach(item => {
@@ -198,7 +201,6 @@ class ListUser extends Component {
           listFinal.push(item);
         }
       })
-
       //listFinal tiene los usuarios que me tienen agregado, entonces debo verificar que no los tengo bloqueado
       let listNoBlocked = [];
       listFinal.forEach(item => {

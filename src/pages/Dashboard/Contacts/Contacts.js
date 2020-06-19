@@ -34,10 +34,12 @@ class Contacts extends Component {
   lastElement = () => this.firstElement() + pageSize;
 
   listContacts() {
-    const uid = this.props.firebase.auth().currentUser.uid;
+    //const uid = this.props.firebase.auth().currentUser.uid;
     const users = this.props.users || [];
     let contacts = this.props.contacts || [];
-    contacts = contacts.filter((item) => item.userId === uid);
+    //contacts = contacts.filter((item) => item.userId === uid);
+    console.log('contactss', contacts);
+    
     let listContacts = [];
 
     contacts.forEach(item => {
@@ -167,8 +169,8 @@ Contacts.defaultProps = {
   users: [],
 };
 export default compose(
-  firestoreConnect(() => [
-    { collection: 'contacts', where: ["show", "==", true] },
+  firestoreConnect((props) => [
+    { collection: 'contacts', where: ["userId", "==", props.firebase.auth().currentUser.uid] },
     { collection: 'users' },
   ]),
   connect((state) => ({
