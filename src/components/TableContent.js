@@ -54,7 +54,7 @@ function TableContent({
         // ) {
         //   checkValue = true;
         // }
-        if (header.value === 'vinculed' && item.vinculed) {
+        if (header.value === 'linked' && item.linked) {
           checkValue = true;
         }
         return (

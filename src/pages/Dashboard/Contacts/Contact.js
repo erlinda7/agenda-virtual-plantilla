@@ -44,8 +44,8 @@ class Contact extends Component {
       users = nextProps.users;
       update = true;
     }
-    if (contacts.vinculed) {
-      let user = users.filter(i => i.uid === contacts.vinculed);
+    if (contacts.linked) {
+      let user = users.filter(i => i.uid === contacts.linked);
 
       // console.log('user', user[0]);
       // console.log('contact', contacts);
@@ -59,7 +59,7 @@ class Contact extends Component {
           photo: user[0].photo,
           telephone: user[0].telephone,
           userId: contacts.userId,
-          vinculed: contacts.vinculed,
+          linked: contacts.linked,
           created: contacts.created,
         }
         contacts = aux;
@@ -197,7 +197,7 @@ class Contact extends Component {
       const firestore = this.props.firestore;
       const contactId = this.props.match.params.id;
       const { contacts } = this.state;
-      if (contacts.vinculed) {
+      if (contacts.linked) {
         // firestore.update(
         //   { collection: 'contacts', doc: contactId },
         //   {
@@ -235,12 +235,12 @@ class Contact extends Component {
       const uid = firebase.auth().currentUser.uid;
       const contactId = match.params.id;
 
-      if (contacts.vinculed) {
+      if (contacts.linked) {
         //agregar a la lista de bloqueados, cuando esta vinculado el contacto
         await firestore.add(
           { collection: 'blockeds' },
           {
-            idUser: contacts.vinculed,
+            idUser: contacts.linked,
             blocked_by: uid,
             created: new Date(),
           },
@@ -299,7 +299,7 @@ class Contact extends Component {
                 </Row>
                 <Row>
                   <Col></Col>
-                  {!contacts.vinculed &&
+                  {!contacts.linked &&
                     <Col xs="12" md="6" className="justify-content-center">
                       {upload && (
                         <StyledDropzone
@@ -357,7 +357,7 @@ class Contact extends Component {
                         <FormGroup>
                           <Label>Telephone: </Label>
                           <Input
-                            disabled={contacts.vinculed}
+                            disabled={contacts.linked}
                             value={contacts.telephone || ''}
                             type="number"
                             onChange={(e) => this.setState({
@@ -373,7 +373,7 @@ class Contact extends Component {
                         <FormGroup>
                           <Label>Email: </Label>
                           <Input
-                            disabled={contacts.vinculed}
+                            disabled={contacts.linked}
                             value={contacts.email || ''}
                             type="email"
                             onChange={(e) => this.setState({
@@ -389,7 +389,7 @@ class Contact extends Component {
                         <FormGroup>
                           <Label>Adress: </Label>
                           <Input
-                            disabled={contacts.vinculed}
+                            disabled={contacts.linked}
                             value={contacts.adress || ''}
                             type="text"
                             onChange={(e) => this.setState({

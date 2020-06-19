@@ -53,7 +53,7 @@ class ListUser extends Component {
         photo: user[0].photo,
         telephone: user[0].telephone,
         userId: userId,
-        vinculed: id,
+        linked: id,
         //show: true,
       },
     );
@@ -97,7 +97,7 @@ class ListUser extends Component {
         await firestore.update(
           { collection: 'contacts', doc: contact.id },
           {
-            vinculed: firestore.FieldValue.delete()
+            linked: firestore.FieldValue.delete()
           },
         );
 
@@ -106,8 +106,8 @@ class ListUser extends Component {
         await firestore.update(
           { collection: 'contacts', doc: contact.id },
           {
-            vinculed: firestore.FieldValue.delete(),
-            userDeleted: 'User deleted',
+            linked: firestore.FieldValue.delete(),
+            unlinked: 'User deleted',
           },
         );
       }

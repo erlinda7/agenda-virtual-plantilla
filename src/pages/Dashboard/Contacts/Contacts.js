@@ -38,14 +38,13 @@ class Contacts extends Component {
     const users = this.props.users || [];
     let contacts = this.props.contacts || [];
     //contacts = contacts.filter((item) => item.userId === uid);
-    console.log('contactss', contacts);
-    
+    //console.log('contactss', contacts);
+
     let listContacts = [];
 
     contacts.forEach(item => {
-      if (item.vinculed) {
-        // console.log('vinculed', item.vinculed);
-        let user = users.filter(i => i.uid === item.vinculed);
+      if (item.linked) {
+        let user = users.filter(i => i.uid === item.linked);
         if (user.length !== 0) {
           const aux = {
             id: item.id,
@@ -55,7 +54,7 @@ class Contacts extends Component {
             photo: user[0].photo,
             telephone: user[0].telephone,
             userId: item.userId,
-            vinculed: item.vinculed,
+            linked: item.linked,
           }
           listContacts.push(aux);
         }
@@ -129,8 +128,8 @@ class Contacts extends Component {
                     { value: 'name', label: 'Name' },
                     { value: 'telephone', label: 'Telephone' },
                     { value: 'email', label: 'Email' },
-                    { value: 'vinculed', label: 'Vinculed', type: 'checkContent' },
-                     { value: "userDeleted", label: "Status", type: "status" },
+                    { value: 'linked', label: 'Linked', type: 'checkContent' },
+                    { value: "unlinked", label: "Status", type: "status" },
                     { label: 'See More', type: 'detail-button' },
                   ]}
                   content={filterContacts}
