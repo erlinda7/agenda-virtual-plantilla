@@ -24,16 +24,18 @@ class Contact extends Component {
     super(props);
     this.state = {
       contacts: false,
+      //allContacts: false,
       users: false,
       editMode: this.props.match.params.id !== 'new',
       upload: true,
       namePhoto: false,
+      userIdLinked: false,
     };
   }
 
   static getDerivedStateFromProps(nextProps, prevState) {
     let update = false;
-    let { contacts, users } = prevState;
+    let { contacts, users, userIdLinked, allContacts } = prevState;
     if (nextProps.contacts && Object.keys(nextProps.contacts).length !== 0 && !contacts) {
       contacts = nextProps.contacts;
       update = true;
@@ -42,8 +44,13 @@ class Contact extends Component {
       users = nextProps.users;
       update = true;
     }
+    // if (nextProps.allContacts && Object.keys(nextProps.allContacts).length !== 0 && !allContacts) {
+    //   allContacts = nextProps.allContacts;
+    //   update = true;
+    // }
     if (contacts.linked) {
       let user = users.filter(i => i.uid === contacts.linked);
+      userIdLinked = user[0].uid;
       if (user.length !== 0) {
         const aux = {
           adress: user[0].adress,
@@ -62,6 +69,8 @@ class Contact extends Component {
       return {
         contacts,
         users,
+        userIdLinked,
+        allContacts,
       };
     } return null;
   }
@@ -202,15 +211,61 @@ class Contact extends Component {
 
   blockContact() {
     confirmBlocked(async () => {
-      console.log('idContacts', this.props.match.params.id);
-
-      console.log('bloqueado', this.state.contacts);
-      const { contacts } = this.state;
       const { firebase, firestore, match } = this.props;
-      const uid = firebase.auth().currentUser.uid;
       const contactId = match.params.id;
+      const { userIdLinked, users, contacts } = this.state;
+      const currentUser = firebase.auth().currentUser;
+      const uid = currentUser.uid;
+      const providerId = currentUser.providerData[0].providerId;
+      let loggedUser = {};
+      let contact = {};
+      let aggregate = false;
+      ///user logged
+      const userCurrent = users.filter(item => item.uid === uid);
+      if (userCurrent.length !== 0) {
+        loggedUser = userCurrent[0];
+      }
+
+      //mi contacto en los contactos del usuario a bloquear
+      const contactUser = this.props.allContacts.filter(item => (item.userId === userIdLinked));//los contactos del usuario a bloquear
+      if (contactUser.length !== 0) {
+        if (providerId === 'google.com') {
+          const aux = contactUser.filter(item => item.email === loggedUser.email);
+          contact = aux[0];
+          aggregate = true;
+        }
+        if (providerId === 'phone') {
+          const aux = contactUser.filter(item => item.telephone === loggedUser.telephone);
+          contact = aux[0];
+          aggregate = true;
+        }
+      }
 
       if (contacts.linked) {
+        //quien se creo primero el user o contact
+        if (aggregate) {
+          if (contact.created.seconds < loggedUser.created.seconds) {
+            //primero el contacto y luego el usuario
+            await firestore.update(
+              { collection: 'contacts', doc: contact.id },
+              {
+                linked: firestore.FieldValue.delete()
+              },
+            );
+
+          } else {
+            //primero se creo el usuario y luego el contacto
+            await firestore.update(
+              { collection: 'contacts', doc: contact.id },
+              {
+                linked: firestore.FieldValue.delete(),
+                unlinked: 'User deleted',
+              },
+            );
+          }
+        }
+
+
         //agregar a la lista de bloqueados, cuando esta vinculado el contacto
         await firestore.add(
           { collection: 'blockeds' },
@@ -438,6 +493,7 @@ class Contact extends Component {
 Contact.defaultProps = {
   contacts: {},
   users: [],
+  allContacts: [],
   firestore: {},
   firebase: {},
   history: {},
@@ -454,10 +510,12 @@ Contact.propTypes = {
 export default compose(
   firestoreConnect((props) => [
     { collection: 'contacts', doc: props.match.params.id },
+    { collection: 'contacts' },
     { collection: 'users' },
   ]),
   connect((state, props) => ({
     contacts: state.firestore.data.contacts ? state.firestore.data.contacts[props.match.params.id] : {},
+    allContacts: state.firestore.ordered.contacts ? state.firestore.ordered.contacts : [],
     users: state.firestore.ordered.users ? state.firestore.ordered.users : [],
   }
   )),

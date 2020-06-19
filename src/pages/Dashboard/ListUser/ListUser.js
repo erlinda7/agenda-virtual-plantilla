@@ -54,6 +54,7 @@ class ListUser extends Component {
         telephone: user[0].telephone,
         userId: userId,
         linked: id,
+        created: new Date(),
         //show: true,
       },
     );
