@@ -7,7 +7,6 @@ import PropTypes from 'prop-types';
 import Loader from 'react-loader-spinner';
 import { confirmDelete, confirmBlocked } from '../../../helper_functions/helperFunctions';
 import StyledDropzone from '../../../components/StyledDropzone';
-import { Link } from 'react-router-dom';
 import {
   Button,
   Card,
@@ -26,7 +25,6 @@ class Contact extends Component {
     this.state = {
       contacts: false,
       users: false,
-      // editMode: !this.props.match.params.id.includes('new'),
       editMode: this.props.match.params.id !== 'new',
       upload: true,
       namePhoto: false,
@@ -46,11 +44,6 @@ class Contact extends Component {
     }
     if (contacts.linked) {
       let user = users.filter(i => i.uid === contacts.linked);
-
-      // console.log('user', user[0]);
-      // console.log('contact', contacts);
-
-
       if (user.length !== 0) {
         const aux = {
           adress: user[0].adress,
@@ -64,7 +57,6 @@ class Contact extends Component {
         }
         contacts = aux;
       }
-      //console.log('vinculado', user);
     }
     if (update) {
       return {
@@ -154,26 +146,19 @@ class Contact extends Component {
           ...contacts,
           photo: "https://firebasestorage.googleapis.com/v0/b/agendavirtual-f818c.appspot.com/o/photoDefault%2Fphoto_.jpg?alt=media&token=7521d6fb-f361-4b1f-b221-313d5e310aaa",
           userId: idUser,
-          //show: true,
           created: new Date(),
         },
       );
-      // console.log('newContact', newContact.id);
-      // console.log('email', contacts.email);
-      // console.log('telephone', contacts.telephone);
       this.props.history.push('/contacts');
 
       const vincu = await firebase.functions().httpsCallable(
-        `contactsRequests/newContact?telephone=${contacts.telephone}&email=${contacts.email}&idContact=${newContact.id}&userEmail=${userEmail}&userPhone=${userPhone}`
+        `contactsRequests/newContact?telephone=${contacts.telephone}&email=${contacts.email}&idContact=${newContact.id}&userEmail=${userEmail}&userPhone=${userPhone}&userId=${idUser}`
       );
       await vincu().then(result => {
         //
       }).catch(error => {
         //
       })
-
-
-      // window.location.reload(true);
     }
   };
 
@@ -198,16 +183,6 @@ class Contact extends Component {
       const contactId = this.props.match.params.id;
       const { contacts } = this.state;
       if (contacts.linked) {
-        // firestore.update(
-        //   { collection: 'contacts', doc: contactId },
-        //   {
-        //     ...contacts,
-        //     show: false,
-        //   },
-        // );
-
-        //console.log('contactss', contacts);
-
         await firestore.add(
           { collection: 'deletedContacts' },
           {
