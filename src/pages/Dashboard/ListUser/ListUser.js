@@ -143,8 +143,8 @@ class ListUser extends Component {
     const contacts = this.props.contacts || [];
     const users = this.props.users || [];
     let listUserAggregates = []; //usuarios que me tienen agregado en sus contactos
-    const blockeds = this.props.blockeds || []; //todos mis bloqueados
-
+    let blockeds = this.props.blockeds || []; //todos mis bloqueados
+    blockeds = blockeds.filter(item => item.blocked_by === uid);
     let filterNoContacts = contacts.filter(item => item.userId !== uid); //que no estan en mis contactos
     let filterMyContacts = contacts.filter(item => item.userId === uid);
 
@@ -159,6 +159,13 @@ class ListUser extends Component {
             listUserAggregates.push(user[0]);
         }
       })
+
+      //eliminar duplicados
+      listUserAggregates = listUserAggregates.filter((valorActual, indiceActual, arreglo) => {
+        return arreglo.findIndex(
+          valorDelArreglo => JSON.stringify(valorDelArreglo) === JSON.stringify(valorActual)
+        ) === indiceActual
+      });
 
       listUserAggregates.forEach(item => {
         let aux = filterMyContacts.filter(c => c.email === item.email);
@@ -175,7 +182,6 @@ class ListUser extends Component {
           listNoBlocked.push(item);
         }
       })
-
       return listNoBlocked;
     }
 
@@ -190,6 +196,13 @@ class ListUser extends Component {
             listUserAggregates.push(user[0]);
         }
       })
+
+      //eliminar duplicados
+      listUserAggregates = listUserAggregates.filter((valorActual, indiceActual, arreglo) => {
+        return arreglo.findIndex(
+          valorDelArreglo => JSON.stringify(valorDelArreglo) === JSON.stringify(valorActual)
+        ) === indiceActual
+      });
 
       listUserAggregates.forEach(item => {
         let aux = filterMyContacts.filter(c => c.telephone === item.telephone);
@@ -320,7 +333,7 @@ export default compose(
   firestoreConnect((props) => [
     { collection: 'contacts' },
     { collection: 'users' },
-    { collection: 'blockeds', where: ["blocked_by", "==", props.firebase.auth().currentUser.uid] }
+    { collection: 'blockeds' }
   ]),
   connect((state) => ({
     contacts: state.firestore.ordered.contacts ? state.firestore.ordered.contacts : [],

@@ -54,7 +54,8 @@ class BlockedUser extends Component {
 
   listUser() {
     const users = this.props.users || [];
-    const blockeds = this.props.blockeds || [];
+    let blockeds = this.props.blockeds || [];
+    blockeds = blockeds.filter(item => item.blocked_by === this.props.firebase.auth().currentUser.uid);
     let listFinal = [];
     blockeds.forEach(item => {
       if (item.idUser) {
@@ -190,7 +191,7 @@ BlockedUser.defaultProps = {
 export default compose(
   firestoreConnect((props) => [
     { collection: 'users' },
-    { collection: 'blockeds', where: ["blocked_by", "==", props.firebase.auth().currentUser.uid] },
+    { collection: 'blockeds' },
   ]),
   connect((state) => ({
     users: state.firestore.ordered.users ? state.firestore.ordered.users : [],
