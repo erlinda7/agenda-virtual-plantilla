@@ -14,13 +14,12 @@ const user = async (uid) => {
     .get()
     .then(function (doc) {
       if (doc.exists) {
-        //console.log('document data', doc.data());
         userExits = true;
       } else {
-        console.log('no such document');
+        // console.log('no such document');
       }
     }).catch(function (error) {
-      console.log('error getting document', error);
+      // console.log('error getting document', error);
     })
   return userExits
 }

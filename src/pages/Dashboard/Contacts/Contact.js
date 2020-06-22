@@ -24,7 +24,6 @@ class Contact extends Component {
     super(props);
     this.state = {
       contacts: false,
-      //allContacts: false,
       users: false,
       editMode: this.props.match.params.id !== 'new',
       upload: true,
@@ -35,7 +34,7 @@ class Contact extends Component {
 
   static getDerivedStateFromProps(nextProps, prevState) {
     let update = false;
-    let { contacts, users, userIdLinked, allContacts } = prevState;
+    let { contacts, users, userIdLinked } = prevState;
     if (nextProps.contacts && Object.keys(nextProps.contacts).length !== 0 && !contacts) {
       contacts = nextProps.contacts;
       update = true;
@@ -44,10 +43,6 @@ class Contact extends Component {
       users = nextProps.users;
       update = true;
     }
-    // if (nextProps.allContacts && Object.keys(nextProps.allContacts).length !== 0 && !allContacts) {
-    //   allContacts = nextProps.allContacts;
-    //   update = true;
-    // }
     if (contacts.linked) {
       let user = users.filter(i => i.uid === contacts.linked);
       userIdLinked = user[0].uid;
@@ -70,7 +65,6 @@ class Contact extends Component {
         contacts,
         users,
         userIdLinked,
-        allContacts,
       };
     } return null;
   }
@@ -93,10 +87,10 @@ class Contact extends Component {
       (error) => {
         // Error function ...
         this.setState({ upload: true });
-        console.log(error);
+        // console.log(error);
       },
       () => {
-        console.log('finish');
+        // console.log('finish');
         this.setState({ upload: true });
 
         // complete function ...
@@ -181,8 +175,6 @@ class Contact extends Component {
       await storage
         .child(`contactsPhotos/${contactId}/${contacts.namePhoto}`)
         .delete()
-        .then(() => console.log('contact photo delete'))
-        .catch((error) => console.log(error));
     }
   }
 

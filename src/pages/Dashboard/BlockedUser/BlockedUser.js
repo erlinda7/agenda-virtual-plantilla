@@ -111,7 +111,6 @@ class BlockedUser extends Component {
       this.firstElement(),
       this.lastElement(),
     );
-    console.log('blockeds', filterBlockeds);
 
     return (
       <div className="animated fadeIn">

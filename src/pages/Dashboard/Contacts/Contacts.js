@@ -34,11 +34,8 @@ class Contacts extends Component {
   lastElement = () => this.firstElement() + pageSize;
 
   listContacts() {
-    //const uid = this.props.firebase.auth().currentUser.uid;
     const users = this.props.users || [];
     let contacts = this.props.contacts || [];
-    //contacts = contacts.filter((item) => item.userId === uid);
-    //console.log('contactss', contacts);
 
     let listContacts = [];
 
@@ -63,7 +60,6 @@ class Contacts extends Component {
         listContacts.push(item);
       }
     })
-    //console.log('list', listContacts);
 
     return listContacts;
 
@@ -95,7 +91,6 @@ class Contacts extends Component {
       this.firstElement(),
       this.lastElement(),
     );
-    //    console.log('contact', this.props.contacts);
     return (
       <div className="animated fadeIn">
         <Row>

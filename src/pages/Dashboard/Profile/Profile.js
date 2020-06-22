@@ -62,10 +62,10 @@ class Profile extends Component {
       (error) => {
         // Error function ...
         this.setState({ upload: true });
-        console.log(error);
+        // console.log(error);
       },
       () => {
-        console.log('finish');
+        // console.log('finish');
         this.setState({ upload: true });
 
         // complete function ...

@@ -169,9 +169,6 @@ class ListUser extends Component {
         }
       })
 
-      
-      console.log('listFinal', listFinal);
-
       //listFinal tiene los usuarios que me tienen agregado, entonces debo verificar que no los tengo bloqueado
       let listNoBlocked = [];
       listFinal.forEach(item => {
@@ -242,7 +239,6 @@ class ListUser extends Component {
       this.firstElement(),
       this.lastElement(),
     );
-    //  console.log('mis bloqueados', this.props.blockeds);
 
     return (
       <div className="animated fadeIn">
