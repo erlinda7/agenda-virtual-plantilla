@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
-import { confirmDelete, confirmBlocked } from '../../../helper_functions/helperFunctions';
+import { confirmBlocked } from '../../../helper_functions/helperFunctions';
 import {
-  Button,
   Card,
   CardBody,
   CardHeader,
@@ -215,7 +213,7 @@ class ListUser extends Component {
   filterUsers() {
     let str = this.state.filterText;
     let filtered = this.listUser() || [];
-
+    //filtered = filtered.filter(item => item.userId === this.props.firebase.auth().currentUser.uid)
     if (str) {
       str = str.toLowerCase();
       filtered = filtered.filter(

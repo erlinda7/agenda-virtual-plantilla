@@ -36,7 +36,7 @@ class Contacts extends Component {
   listContacts() {
     const users = this.props.users || [];
     let contacts = this.props.contacts || [];
-
+    contacts = contacts.filter(item => item.userId === this.props.firebase.auth().currentUser.uid)
     let listContacts = [];
 
     contacts.forEach(item => {
@@ -69,7 +69,6 @@ class Contacts extends Component {
     let str = this.state.filterText;
 
     let filtered = this.listContacts() || [];
-    filtered = filtered.filter(item => item.userId === this.props.firebase.auth().currentUser.uid)
 
     if (str) {
       str = str.toLowerCase();
