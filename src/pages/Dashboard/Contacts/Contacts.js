@@ -69,6 +69,7 @@ class Contacts extends Component {
     let str = this.state.filterText;
 
     let filtered = this.listContacts() || [];
+    filtered = filtered.filter(item => item.userId === this.props.firebase.auth().currentUser.uid)
 
     if (str) {
       str = str.toLowerCase();
@@ -164,7 +165,7 @@ Contacts.defaultProps = {
 };
 export default compose(
   firestoreConnect((props) => [
-    { collection: 'contacts', where: ["userId", "==", props.firebase.auth().currentUser.uid] },
+    { collection: 'contacts' },
     { collection: 'users' },
   ]),
   connect((state) => ({
