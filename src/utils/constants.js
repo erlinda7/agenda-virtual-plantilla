@@ -14,4 +14,5 @@ export const TABLE_TYPE = {
   deleteButton: 'delete-button',
   addButton: 'add-button',
   blockButton: 'block-button',
+  unblockButton: 'unblock-button',
 };

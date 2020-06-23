@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 //import { Link } from 'react-router-dom';
 import {
- // Button,
+  // Button,
   Card,
   CardBody,
   CardHeader,
@@ -38,19 +38,77 @@ class BlockedUser extends Component {
 
   onDismiss = () => this.setState({ visibleAlert: false });
 
-  // async unlock(id) {
-  //desbloquear
-  // }
+  async unblock(id) {
+    const blockeds = this.props.blockeds || [];
+    const contacts = this.props.contacts || [];
+    const { firestore } = this.props;
+    const currentUser = this.props.firebase.auth().currentUser;
+    const providerId = currentUser.providerData[0].providerId;
+    const userBlocked = blockeds.filter(item => item.id === id);
 
-  // actionHandler(id, action) {
-  //   switch (action) {
-  //     case 'add_action':
-  //       this.unlock(id);
-  //       break;
-  //     default: console.log('undefined action... =(');
-  //       break;
-  //   }
-  // }
+    let myContactsBlocked = [];
+    let idUserBlocked = [];
+    let contactsPromiseArray = [];
+
+    if (userBlocked.length !== 0)
+      idUserBlocked = userBlocked[0].idUser;
+
+    //contactos del bloqueado
+    const contactsBlocked = contacts.filter(item => item.userId === idUserBlocked);
+    //buscar mi contacto en los contactos del bloqueado
+    if (contactsBlocked.length !== 0) {
+      if (providerId === 'google.com')
+        myContactsBlocked = contactsBlocked.filter(item => item.email === currentUser.email);
+
+      if (providerId === 'phone') {
+        const tel = currentUser.phoneNumber.substring(4, currentUser.phoneNumber.length);
+        myContactsBlocked = contactsBlocked.filter(item => item.telephone === tel);
+      }
+    }
+
+    if (myContactsBlocked.length !== 0) {
+      myContactsBlocked.forEach(item => {
+        if (item.unlinked) {
+          contactsPromiseArray.push(
+            firestore.update(
+              { collection: 'contacts', doc: item.id },
+              {
+                unlinked: firestore.FieldValue.delete(),
+                linked: currentUser.uid,
+              },
+            )
+          )
+        } else {
+          contactsPromiseArray.push(
+            firestore.update(
+              { collection: 'contacts', doc: item.id },
+              {
+                linked: currentUser.uid,
+              },
+            )
+          )
+        }
+      })
+    }
+
+    contactsPromiseArray.push(
+      firestore.delete({ collection: 'blockeds', doc: id })
+    )
+    Promise.all(contactsPromiseArray);
+    //eliminar id en coleccion blockeds
+    let alert = { type: 'success', message: 'User were unblock successfully' };
+    this.setState({ alert, visibleAlert: true });
+  }
+
+  actionHandler(id, action) {
+    switch (action) {
+      case 'unblock_action':
+        this.unblock(id);
+        break;
+      default: console.log('undefined action... =(');
+        break;
+    }
+  }
 
   listUser() {
     const users = this.props.users || [];
@@ -151,10 +209,11 @@ class BlockedUser extends Component {
                     { value: 'name', label: 'Name' },
                     { value: 'telephone', label: 'Telephone' },
                     { value: 'email', label: 'Email' },
+                    { label: 'Unblock User', type: 'unblock-button' },
                     // { label: 'Action', type: 'add-button' },
                   ]}
                   content={filterBlockeds}
-                // onClick={(item, action) => this.actionHandler(item.id, action)}
+                  onClick={(item, action) => this.actionHandler(item.id, action)}
                 />
                 <ReactPaginate
                   previousLabel="previous"
@@ -181,20 +240,24 @@ class BlockedUser extends Component {
 BlockedUser.propTypes = {
   users: PropTypes.arrayOf(PropTypes.oneOfType([PropTypes.any])),
   blockeds: PropTypes.arrayOf(PropTypes.oneOfType([PropTypes.any])),
+  contacts: PropTypes.arrayOf(PropTypes.oneOfType([PropTypes.any])),
   history: PropTypes.objectOf(PropTypes.oneOfType(PropTypes.any)).isRequired,
   firebase: PropTypes.objectOf(PropTypes.oneOfType(PropTypes.any)).isRequired,
 };
 BlockedUser.defaultProps = {
   users: [],
   blockeds: [],
+  contacts: [],
 };
 export default compose(
   firestoreConnect((props) => [
     { collection: 'users' },
     { collection: 'blockeds' },
+    { collection: 'contacts' },
   ]),
   connect((state) => ({
     users: state.firestore.ordered.users ? state.firestore.ordered.users : [],
     blockeds: state.firestore.ordered.blockeds ? state.firestore.ordered.blockeds : [],
+    contacts: state.firestore.ordered.contacts ? state.firestore.ordered.contacts : [],
   })),
 )(BlockedUser);

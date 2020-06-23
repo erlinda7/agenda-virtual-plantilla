@@ -183,6 +183,19 @@ function TableContent({
         );
       }
 
+      case TABLE_TYPE.unblockButton: {
+        return (
+          <td key={index}>
+            <Button
+              color="primary"
+              onClick={() => onClick(item, 'unblock_action')}
+            >
+              Unblock User
+            </Button>
+          </td>
+        );
+      }
+
       default: {
         return <td key={index}>{item[header.value]}</td>;
       }
