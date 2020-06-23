@@ -106,6 +106,25 @@ class Profile extends Component {
     })
   }
 
+  checkValidator() {
+    const { users } = this.state;
+    if (users.providerId === 'google.com') {
+      if (users.name === "") return true;
+      if (users.telephone === "") return true;
+      if (users.adress === "") return true;
+    } else {
+      return false;
+    }
+
+    if (users.providerId === 'phone') {
+      if (users.name === "") return true;
+      if (users.email === "") return true;
+      if (users.adress === "") return true;
+    } else {
+      return false;
+    }
+  }
+
   render() {
     const bannerStyle = {
       marginBottom: 20,
@@ -219,7 +238,7 @@ class Profile extends Component {
                   </Col>
                   <Col xs="12" md="6">
                     <FormGroup>
-                      <Label>Adress: </Label>
+                      <Label>Address: </Label>
                       <Input
                         value={adress || ''}
                         type="text"
@@ -245,6 +264,7 @@ class Profile extends Component {
             onClick={() => {
               this.submit();
             }}
+            disabled={this.checkValidator()}
           >
             Submit
           </Button>

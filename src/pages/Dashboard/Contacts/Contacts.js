@@ -48,6 +48,7 @@ class Contacts extends Component {
             adress: user[0].adress,
             email: user[0].email,
             name: item.name,
+            username: user[0].name,
             photo: user[0].photo,
             telephone: user[0].telephone,
             userId: item.userId,
@@ -120,11 +121,12 @@ class Contacts extends Component {
                 <TableContent
                   headers={[
                     { value: 'photo', label: 'Photo', type: 'image' },
-                    { value: 'name', label: 'Name' },
+                    { value: 'name', label: 'Contact Name' },
+                    { value: 'username', label: 'User Name' },
                     { value: 'telephone', label: 'Telephone' },
                     { value: 'email', label: 'Email' },
                     { value: 'linked', label: 'Linked', type: 'checkContent' },
-                    { value: "unlinked", label: "Status", type: "status" },
+                    { value: "unlinked", label: "Unlinked", type: "status" },
                     { label: 'See More', type: 'detail-button' },
                   ]}
                   content={filterContacts}

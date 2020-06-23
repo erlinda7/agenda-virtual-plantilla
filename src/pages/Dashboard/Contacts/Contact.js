@@ -29,6 +29,7 @@ class Contact extends Component {
       upload: true,
       namePhoto: false,
       userIdLinked: false,
+      control: false,
     };
   }
 
@@ -44,9 +45,11 @@ class Contact extends Component {
       update = true;
     }
     if (contacts.linked) {
-      let user = users.filter(i => i.uid === contacts.linked);
-      userIdLinked = user[0].uid;
+      let user = [];
+      if (users !== false)
+        user = users.filter(i => i.uid === contacts.linked);
       if (user.length !== 0) {
+        userIdLinked = user[0].uid;
         const aux = {
           adress: user[0].adress,
           email: user[0].email,
@@ -293,6 +296,19 @@ class Contact extends Component {
     })
   }
 
+  checkValidator() {
+    const { contacts } = this.state;
+    if (this.props.match.params.id === 'new') {
+      if (contacts === false) return true;
+      if (contacts.name === "") return true;
+      if (contacts.telephone === "") return true;
+      if (contacts.email === "") return true;
+      if (contacts.adress === "") return true;
+    } else {
+      return false;
+    }
+  }
+
   render() {
     const {
       contacts,
@@ -409,7 +425,7 @@ class Contact extends Component {
                       </Col>
                       <Col xs="12" md="6">
                         <FormGroup>
-                          <Label>Adress: </Label>
+                          <Label>Address: </Label>
                           <Input
                             disabled={contacts.linked}
                             value={contacts.adress || ''}
@@ -436,6 +452,7 @@ class Contact extends Component {
                 onClick={() => {
                   this.submit();
                 }}
+                disabled={this.checkValidator()}
               >
                 Submit
               </Button>

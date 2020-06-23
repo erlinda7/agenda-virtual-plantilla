@@ -1,10 +1,10 @@
-import React from 'react';
+//import React from 'react';
 import { confirmAlert } from 'react-confirm-alert';
 import 'react-confirm-alert/src/react-confirm-alert.css';
 
 export function confirmDelete(callback) {
     return confirmAlert({
-      title: 'Are you sure you want to delete?',
+      title: 'Are you sure you want to delete this contact ?',
       message: 'This cannot be reverted',
       buttons: [
         {
@@ -22,7 +22,7 @@ export function confirmDelete(callback) {
 
   export function confirmBlocked(callback) {
     return confirmAlert({
-      title: 'Are you sure you want to blocked?',
+      title: 'Are you sure you want to block this contact ?',
       message: 'This cannot be reverted',
       buttons: [
         {

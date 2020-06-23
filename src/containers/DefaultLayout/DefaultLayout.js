@@ -7,10 +7,10 @@ import { Container } from 'reactstrap';
 import {
   AppHeader,
   AppSidebar,
-  AppSidebarFooter,
+  //AppSidebarFooter,
   AppSidebarForm,
   AppSidebarHeader,
-  AppSidebarMinimizer,
+  //AppSidebarMinimizer,
   AppBreadcrumb2 as AppBreadcrumb,
   AppSidebarNav2 as AppSidebarNav,
 } from '@coreui/react';

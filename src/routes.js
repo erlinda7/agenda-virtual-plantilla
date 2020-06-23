@@ -1,4 +1,4 @@
-import React from 'react';
+//import React from 'react';
 
 import Profile from './pages/Dashboard/Profile/Profile';
 import Contacts from './pages/Dashboard/Contacts/Contacts';
