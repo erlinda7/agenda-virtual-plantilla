@@ -1,3 +1,5 @@
+/* eslint-disable jsx-a11y/alt-text */
+/* eslint-disable react/jsx-no-target-blank */
 /* eslint-disable jsx-a11y/img-redundant-alt */
 import React, { Component } from 'react';
 import { compose } from 'redux';
@@ -30,9 +32,14 @@ class Contact extends Component {
       namePhoto: false,
       userIdLinked: false,
       control: false,
+      isMobile: '',
     };
   }
 
+  componentDidMount() {
+    const isMobile = this.detectmob();
+    this.setState({ isMobile });
+  }
   static getDerivedStateFromProps(nextProps, prevState) {
     let update = false;
     let { contacts, users, userIdLinked } = prevState;
@@ -309,11 +316,16 @@ class Contact extends Component {
     }
   }
 
+  detectmob() {
+    return !!navigator.userAgent.match(/iPad|iPhone|Android|BlackBerry|Windows Phone|webOS/i);
+  }
+
   render() {
     const {
       contacts,
       upload,
       editMode,
+      isMobile,
     } = this.state;
     const bannerStyle = {
       marginBottom: 20,
@@ -321,6 +333,13 @@ class Contact extends Component {
       height: 200,
       objectFit: 'contain',
     };
+
+    const fontStyle = {
+      textDecoration: 'none',
+      fontSize: 18,
+      fontWeight: 'bold',
+      color: 'black'
+    }
 
     return (
 
@@ -477,6 +496,40 @@ class Contact extends Component {
               )}
             </Row>
             <br />
+            <br />
+            {editMode &&
+              <Row >
+                <Col >
+                  <Card>
+                    <CardHeader>
+                      <strong>
+                        <i className="icon-info pr-1" />
+                          Actions
+                        </strong>
+                    </CardHeader>
+                    <CardBody>
+                      <br />
+                      <Row className="justify-content-center">
+                        <Col xs="12" md="6">
+                          <a target="_blank" href={`mailto:${contacts.email}?body=Hola%20${contacts.name}`} style={fontStyle}><img src="../../../assets/img/correo.png" /> Send Email</a>
+                        </Col>
+                        <Col xs="12" md="6">
+                          <a target="_blank" href={`https://wa.me/591${contacts.telephone}?text=Hola%20${contacts.name}`} style={fontStyle}><img src="../../../assets/img/whatsapp.png" /> Send sms WhatsApp </a>
+                        </Col>
+                      </Row>
+                      <Row>
+                        <Col xs="12" md="6">
+                          {isMobile &&
+                            <a target="_blank" href={`tel:+591${contacts.telephone}`} style={fontStyle} ><img src="../../../assets/img/llamada.png" /> Call telephone</a>
+                          }
+                        </Col>
+                      </Row>
+                      <br />
+                    </CardBody>
+                  </Card>
+                </Col>
+              </Row>
+            }
           </>
           :
           <center>
