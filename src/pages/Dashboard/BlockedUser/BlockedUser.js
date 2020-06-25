@@ -235,11 +235,11 @@ class BlockedUser extends Component {
 }
 
 BlockedUser.propTypes = {
-  users: PropTypes.arrayOf(PropTypes.oneOfType([PropTypes.any])),
-  blockeds: PropTypes.arrayOf(PropTypes.oneOfType([PropTypes.any])),
-  contacts: PropTypes.arrayOf(PropTypes.oneOfType([PropTypes.any])),
-  history: PropTypes.objectOf(PropTypes.oneOfType(PropTypes.any)).isRequired,
-  firebase: PropTypes.objectOf(PropTypes.oneOfType(PropTypes.any)).isRequired,
+  users: PropTypes.arrayOf(PropTypes.any).isRequired,
+  blockeds: PropTypes.arrayOf(PropTypes.any).isRequired,
+  contacts: PropTypes.arrayOf(PropTypes.any).isRequired,
+  history: PropTypes.objectOf(PropTypes.any).isRequired,
+  firebase: PropTypes.objectOf(PropTypes.any).isRequired,
 };
 BlockedUser.defaultProps = {
   users: [],

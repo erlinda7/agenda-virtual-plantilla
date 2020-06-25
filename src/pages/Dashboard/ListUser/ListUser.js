@@ -316,10 +316,11 @@ class ListUser extends Component {
 }
 
 ListUser.propTypes = {
-  contacts: PropTypes.arrayOf(PropTypes.oneOfType([PropTypes.any])),
-  users: PropTypes.arrayOf(PropTypes.oneOfType([PropTypes.any])),
-  history: PropTypes.objectOf(PropTypes.oneOfType(PropTypes.any)).isRequired,
-  firebase: PropTypes.objectOf(PropTypes.oneOfType(PropTypes.any)).isRequired,
+  contacts: PropTypes.arrayOf(PropTypes.any).isRequired,
+  users: PropTypes.arrayOf(PropTypes.any).isRequired,
+  blockeds: PropTypes.arrayOf(PropTypes.any).isRequired,
+  history: PropTypes.objectOf(PropTypes.any).isRequired,
+  firebase: PropTypes.objectOf(PropTypes.any).isRequired,
 };
 ListUser.defaultProps = {
   contacts: [],

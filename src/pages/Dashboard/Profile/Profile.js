@@ -287,10 +287,10 @@ Profile.defaultProps = {
   match: {},
 };
 Profile.propTypes = {
-  users: PropTypes.shape(),
-  history: PropTypes.func,
-  match: PropTypes.func,
-  firestore: PropTypes.shape(),
+  users: PropTypes.arrayOf(PropTypes.any).isRequired,
+  history: PropTypes.objectOf(PropTypes.any).isRequired,
+  match: PropTypes.objectOf(PropTypes.any).isRequired,
+  firestore: PropTypes.objectOf(PropTypes.any).isRequired,
 };
 
 export default compose(

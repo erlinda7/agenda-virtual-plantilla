@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 import { TABLE_TYPE } from '../utils/constants';
 
 function TableContent({
-  headers, content, onClick, rowIsActive, maxRank,
+  headers, content, onClick,
 }) {
   const itemForCellWith = (header, item, index) => {
 
@@ -112,7 +112,7 @@ function TableContent({
       </thead>
       <tbody>
         {content.map((item) => (
-          <tr className={item[rowIsActive] ? 'active' : ''} key={item.id}>
+          <tr key={item.id}>
             {headers.map((header, index) => itemForCellWith(header, item, index))}
           </tr>
         ))}
@@ -121,11 +121,9 @@ function TableContent({
   );
 }
 TableContent.propTypes = {
-  headers: PropTypes.shape.isRequired,
-  content: PropTypes.shape.isRequired,
+  headers: PropTypes.arrayOf(PropTypes.any).isRequired,
+  content: PropTypes.arrayOf(PropTypes.any).isRequired,
   onClick: PropTypes.func.isRequired,
-  // rowIsActive: PropTypes.string.isRequired,
-  // maxRank: PropTypes.number,
 
 };
 
