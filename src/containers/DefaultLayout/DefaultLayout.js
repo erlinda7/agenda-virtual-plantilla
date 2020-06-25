@@ -7,10 +7,8 @@ import { Container } from 'reactstrap';
 import {
   AppHeader,
   AppSidebar,
-  //AppSidebarFooter,
   AppSidebarForm,
   AppSidebarHeader,
-  //AppSidebarMinimizer,
   AppBreadcrumb2 as AppBreadcrumb,
   AppSidebarNav2 as AppSidebarNav,
 } from '@coreui/react';
@@ -57,7 +55,6 @@ class DefaultLayout extends Component {
       marginLeft: 30,
       width: 100,
       height: 100,
-      //objectFit: 'contain',
     };
     const font = {
       fontSize: 14,
@@ -88,8 +85,6 @@ class DefaultLayout extends Component {
             <Suspense>
               <AppSidebarNav navConfig={navigation} {...this.props} router={router} />
             </Suspense>
-            {/* <AppSidebarFooter />
-            <AppSidebarMinimizer /> */}
           </AppSidebar>
           <main className="main">
             <AppBreadcrumb appRoutes={routes} router={router} />

@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
-//import { Link } from 'react-router-dom';
 import {
-  // Button,
   Card,
   CardBody,
   CardHeader,
@@ -210,7 +208,6 @@ class BlockedUser extends Component {
                     { value: 'telephone', label: 'Telephone' },
                     { value: 'email', label: 'Email' },
                     { label: 'Unblock User', type: 'unblock-button' },
-                    // { label: 'Action', type: 'add-button' },
                   ]}
                   content={filterBlockeds}
                   onClick={(item, action) => this.actionHandler(item.id, action)}

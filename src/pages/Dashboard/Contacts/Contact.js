@@ -80,7 +80,6 @@ class Contact extends Component {
   }
 
   handleUpload = (e) => {
-    //canUpload(false);
     const { contacts } = this.state;
     const idContact = this.props.match.params.id;
     const image = e;

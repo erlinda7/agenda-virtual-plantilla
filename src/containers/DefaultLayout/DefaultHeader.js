@@ -23,8 +23,6 @@ class DefaultHeader extends Component {
     // eslint-disable-next-line
     const { children, ...attributes } = this.props;
 
-    //const photo = this.props.photo ? this.props.photo : '../../assets/img/avatars/6.jpg';
-
     return (
       <React.Fragment>
         <AppSidebarToggler className="d-lg-none" display="md" mobile />

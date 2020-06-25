@@ -57,7 +57,7 @@ class ListUser extends Component {
     );
     let alert = { type: 'success', message: 'Contact were saved successfully' };
     this.setState({ alert, visibleAlert: true, editedList: false });
-    // window.location.reload(true);
+    
   }
 
   blockUser(id) {
@@ -225,7 +225,6 @@ class ListUser extends Component {
   filterUsers() {
     let str = this.state.filterText;
     let filtered = this.listUser() || [];
-    //filtered = filtered.filter(item => item.userId === this.props.firebase.auth().currentUser.uid)
     if (str) {
       str = str.toLowerCase();
       filtered = filtered.filter(
@@ -292,7 +291,6 @@ class ListUser extends Component {
                     { label: 'Block User', type: 'block-button' },
                   ]}
                   content={filterUsers}
-                  //onClick={(item) => this.props.history.push(`/listUser/${item.id}`)}
                   onClick={(item, action) => this.actionHandler(item.id, action)}
                 />
                 <ReactPaginate

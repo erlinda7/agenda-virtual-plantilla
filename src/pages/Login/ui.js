@@ -1,9 +1,5 @@
 import firebase from '../../config/firebaseConfig';
 import * as firebaseui from 'firebaseui'
-// import { functions } from 'firebase/app';
-// import axios from "axios";
-
-// const url = 'https://us-central1-agendavirtual-f818c.cloudfunctions.net/usersRequests/newUser';
 
 const user = async (uid) => {
   let userExits = false;
@@ -52,7 +48,6 @@ const db = async (currentUser) => {
             created: new Date(),
           }
         )
-      // console.log('telefono', telephone);
 
       const vincu = await firebase.functions().httpsCallable(
         `usersRequests/newUser?providerId=${providerId}&uid=${uid}&telephone=${tel}`
@@ -90,11 +85,9 @@ const db = async (currentUser) => {
         //
       })
     }
-    // window.location.assign('/');
+    
   }
-  // else {
-  //   window.location.assign('/');
-  // }
+  
 }
 
 let uiConfig = {
@@ -109,7 +102,6 @@ let uiConfig = {
     }
   },
   signInFlow: 'popup',
-  //signInSuccessUrl: '/dashboard',
   signInOptions: [
     firebase.auth.GoogleAuthProvider.PROVIDER_ID,
     {
