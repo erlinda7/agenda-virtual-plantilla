@@ -7,6 +7,7 @@ import { firestoreConnect } from 'react-redux-firebase';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import Loader from 'react-loader-spinner';
+import EmailValidator from 'email-validator';
 import { confirmDelete, confirmBlocked } from '../../../helper_functions/helperFunctions';
 import StyledDropzone from '../../../components/StyledDropzone';
 import {
@@ -19,6 +20,7 @@ import {
   Col,
   Row,
   FormGroup,
+  FormFeedback,
 } from 'reactstrap';
 
 class Contact extends Component {
@@ -142,6 +144,11 @@ class Contact extends Component {
       userPhone = telf.substring(4, telf.length);
     }
 
+    const validate = EmailValidator.validate(contacts.email)
+    if (validate === false) {
+      alert('Invalid Email Address')
+      return
+    }
     if (editMode) {
       firestore.update(
         { collection: 'contacts', doc: contactId },
@@ -323,6 +330,7 @@ class Contact extends Component {
       contacts,
       upload,
       editMode,
+      validate,
     } = this.state;
     const bannerStyle = {
       marginBottom: 20,
@@ -396,7 +404,6 @@ class Contact extends Component {
                         <FormGroup>
                           <Label>Name: </Label>
                           <Input
-                            value={contacts.name || ''}
                             type="text"
                             onChange={(e) => this.setState({
                               contacts: {
@@ -404,7 +411,10 @@ class Contact extends Component {
                                 name: e.target.value
                               }
                             })}
+                            value={contacts.name || ''}
+                            {...(!contacts.name && { invalid: true })}
                           />
+                          <FormFeedback>Set Name</FormFeedback>
                         </FormGroup>
                       </Col>
                       <Col xs="12" md="6">
@@ -412,15 +422,20 @@ class Contact extends Component {
                           <Label>Telephone: </Label>
                           <Input
                             disabled={contacts.linked}
-                            value={contacts.telephone || ''}
                             type="number"
+                            required
+                            min={11111111}
+                            max={99999999}
                             onChange={(e) => this.setState({
                               contacts: {
                                 ...contacts,
                                 telephone: e.target.value
                               }
                             })}
+                            value={contacts.telephone || ''}
+                            {...(!contacts.telephone && { invalid: true })}
                           />
+                          <FormFeedback>Set Telephone</FormFeedback>
                         </FormGroup>
                       </Col>
                       <Col xs="12" md="6">
@@ -428,15 +443,19 @@ class Contact extends Component {
                           <Label>Email: </Label>
                           <Input
                             disabled={contacts.linked}
-                            value={contacts.email || ''}
                             type="email"
+                            required
                             onChange={(e) => this.setState({
                               contacts: {
                                 ...contacts,
                                 email: e.target.value
                               }
                             })}
+                            value={contacts.email || ''}
+                            {...(!contacts.email && { invalid: true })}
                           />
+                          <FormFeedback>Set Email</FormFeedback>
+                          <Label>{validate}</Label>
                         </FormGroup>
                       </Col>
                       <Col xs="12" md="6">
@@ -444,7 +463,6 @@ class Contact extends Component {
                           <Label>Address: </Label>
                           <Input
                             disabled={contacts.linked}
-                            value={contacts.adress || ''}
                             type="text"
                             onChange={(e) => this.setState({
                               contacts: {
@@ -452,7 +470,10 @@ class Contact extends Component {
                                 adress: e.target.value
                               }
                             })}
+                            value={contacts.adress || ''}
+                            {...(!contacts.adress && { invalid: true })}
                           />
+                          <FormFeedback>Set Address</FormFeedback>
                         </FormGroup>
                       </Col>
                     </Row>
@@ -512,7 +533,7 @@ class Contact extends Component {
                             <a target="_blank" href={`mailto:${contacts.email}?body=Hola%20${contacts.name}`} style={fontStyle}><img src="../../../assets/img/correo.png" /> Send Email</a>
                           </Col>
                         }
-                        {contacts.telephone &&
+                        {contacts.telephone.length === 8 &&
                           <Col xs="12" md="6">
                             <a target="_blank" href={`https://wa.me/591${contacts.telephone}?text=Hola%20${contacts.name}`} style={fontStyle}><img src="../../../assets/img/whatsapp.png" /> Send sms WhatsApp </a>
                           </Col>
@@ -558,7 +579,7 @@ Contact.defaultProps = {
 Contact.propTypes = {
   contacts: PropTypes.shape(),
   history: PropTypes.objectOf(PropTypes.any).isRequired,
-  match: PropTypes.func,
+  match: PropTypes.shape(),
   firestore: PropTypes.shape(),
   firebase: PropTypes.shape(),
 };

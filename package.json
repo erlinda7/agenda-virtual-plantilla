@@ -30,6 +30,7 @@
     "draft-js-export-html": "^1.4.1",
     "draft-js-import-html": "^1.4.1",
     "draftjs-to-html": "^0.9.1",
+    "email-validator": "^2.0.4",
     "enzyme": "^3.10.0",
     "enzyme-adapter-react-16": "^1.14.0",
     "firebase": "^7.4.0",

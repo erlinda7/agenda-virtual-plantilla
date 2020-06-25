@@ -5,6 +5,7 @@ import { compose } from 'redux';
 import { firestoreConnect } from 'react-redux-firebase';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import EmailValidator from 'email-validator';
 import StyledDropzone from '../../../components/StyledDropzone';
 import Loader from 'react-loader-spinner';
 import {
@@ -90,6 +91,12 @@ class Profile extends Component {
       users,
       idUser,
     } = this.state;
+    const validate = EmailValidator.validate(users.email)
+    if (validate === false) {
+      alert('Invalid Email Address')
+      return
+    }
+
     const { firestore } = this.props;
     await firestore.update(
       { collection: 'users', doc: idUser },
