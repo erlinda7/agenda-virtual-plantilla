@@ -167,7 +167,7 @@ class ListUser extends Component {
       });
 
       listUserAggregates.forEach(item => {
-        let aux = filterMyContacts.filter(c => c.email === item.email);
+        let aux = filterMyContacts.filter(c => (c.email === item.email || c.telephone === item.telephone));
         if (aux.length === 0) {
           listFinal.push(item);
         }
@@ -204,7 +204,7 @@ class ListUser extends Component {
       });
 
       listUserAggregates.forEach(item => {
-        let aux = filterMyContacts.filter(c => c.telephone === item.telephone);
+        let aux = filterMyContacts.filter(c => (c.email === item.email || c.telephone === item.telephone));
         if (aux.length === 0) {
           listFinal.push(item);
         }
