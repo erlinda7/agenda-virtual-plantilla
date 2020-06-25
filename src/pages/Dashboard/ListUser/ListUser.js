@@ -48,12 +48,11 @@ class ListUser extends Component {
         adress: user[0].adress,
         email: user[0].email,
         name: user[0].name,
-        photo: user[0].photo,
+        photo: "https://firebasestorage.googleapis.com/v0/b/agendavirtual-f818c.appspot.com/o/photoDefault%2Fphoto_.jpg?alt=media&token=7521d6fb-f361-4b1f-b221-313d5e310aaa",
         telephone: user[0].telephone,
         userId: userId,
         linked: id,
         created: new Date(),
-        //show: true,
       },
     );
     let alert = { type: 'success', message: 'Contact were saved successfully' };

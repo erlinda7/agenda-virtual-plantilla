@@ -32,12 +32,13 @@ class Contact extends Component {
       namePhoto: false,
       userIdLinked: false,
       control: false,
+      photoNamedelete: false,
     };
   }
 
   static getDerivedStateFromProps(nextProps, prevState) {
     let update = false;
-    let { contacts, users, userIdLinked } = prevState;
+    let { contacts, users, userIdLinked, photoNamedelete } = prevState;
     if (nextProps.contacts && Object.keys(nextProps.contacts).length !== 0 && !contacts) {
       contacts = nextProps.contacts;
       update = true;
@@ -45,6 +46,9 @@ class Contact extends Component {
     if (nextProps.users && Object.keys(nextProps.users).length !== 0 && !users) {
       users = nextProps.users;
       update = true;
+    }
+    if (contacts.namePhoto) {
+      photoNamedelete = contacts.namePhoto;
     }
     if (contacts.linked) {
       let user = [];
@@ -70,6 +74,7 @@ class Contact extends Component {
         contacts,
         users,
         userIdLinked,
+        photoNamedelete,
       };
     } return null;
   }
@@ -171,15 +176,17 @@ class Contact extends Component {
   };
 
   async deletePhoto() {
-    const { contacts } = this.state;
+    const { contacts, photoNamedelete } = this.state;
     const contactId = this.props.match.params.id;
     const url = "https://firebasestorage.googleapis.com/v0/b/agendavirtual-f818c.appspot.com/o/photoDefault%2Fphoto_.jpg?alt=media&token=7521d6fb-f361-4b1f-b221-313d5e310aaa";
 
     if (contacts.photo !== url) {
-      const storage = this.props.firebase.storage().ref();
-      await storage
-        .child(`contactsPhotos/${contactId}/${contacts.namePhoto}`)
-        .delete()
+      if (photoNamedelete !== false) {
+        const storage = this.props.firebase.storage().ref();
+        await storage
+          .child(`contactsPhotos/${contactId}/${photoNamedelete}`)
+          .delete()
+      }
     }
   }
 
