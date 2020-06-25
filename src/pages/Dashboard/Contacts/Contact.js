@@ -32,14 +32,9 @@ class Contact extends Component {
       namePhoto: false,
       userIdLinked: false,
       control: false,
-      isMobile: '',
     };
   }
 
-  componentDidMount() {
-    const isMobile = this.detectmob();
-    this.setState({ isMobile });
-  }
   static getDerivedStateFromProps(nextProps, prevState) {
     let update = false;
     let { contacts, users, userIdLinked } = prevState;
@@ -316,16 +311,12 @@ class Contact extends Component {
     }
   }
 
-  detectmob() {
-    return !!navigator.userAgent.match(/iPad|iPhone|Android|BlackBerry|Windows Phone|webOS/i);
-  }
 
   render() {
     const {
       contacts,
       upload,
       editMode,
-      isMobile,
     } = this.state;
     const bannerStyle = {
       marginBottom: 20,
@@ -510,19 +501,16 @@ class Contact extends Component {
                     <CardBody>
                       <br />
                       <Row className="justify-content-center">
-                        <Col xs="12" md="6">
-                          <a target="_blank" href={`mailto:${contacts.email}?body=Hola%20${contacts.name}`} style={fontStyle}><img src="../../../assets/img/correo.png" /> Send Email</a>
-                        </Col>
-                        <Col xs="12" md="6">
-                          <a target="_blank" href={`https://wa.me/591${contacts.telephone}?text=Hola%20${contacts.name}`} style={fontStyle}><img src="../../../assets/img/whatsapp.png" /> Send sms WhatsApp </a>
-                        </Col>
-                      </Row>
-                      <Row>
-                        <Col xs="12" md="6">
-                          {isMobile &&
-                            <a target="_blank" href={`tel:+591${contacts.telephone}`} style={fontStyle} ><img src="../../../assets/img/llamada.png" /> Call telephone</a>
-                          }
-                        </Col>
+                        {contacts.email &&
+                          <Col xs="12" md="6">
+                            <a target="_blank" href={`mailto:${contacts.email}?body=Hola%20${contacts.name}`} style={fontStyle}><img src="../../../assets/img/correo.png" /> Send Email</a>
+                          </Col>
+                        }
+                        {contacts.telephone &&
+                          <Col xs="12" md="6">
+                            <a target="_blank" href={`https://wa.me/591${contacts.telephone}?text=Hola%20${contacts.name}`} style={fontStyle}><img src="../../../assets/img/whatsapp.png" /> Send sms WhatsApp </a>
+                          </Col>
+                        }
                       </Row>
                       <br />
                     </CardBody>

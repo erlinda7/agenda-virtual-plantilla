@@ -113,15 +113,13 @@ class Profile extends Component {
       if (users.telephone === "") return true;
       if (users.adress === "") return true;
     } else {
-      return false;
-    }
-
-    if (users.providerId === 'phone') {
-      if (users.name === "") return true;
-      if (users.email === "") return true;
-      if (users.adress === "") return true;
-    } else {
-      return false;
+      if (users.providerId === 'phone') {
+        if (users.name === "") return true;
+        if (users.email === "") return true;
+        if (users.adress === "") return true;
+      } else {
+        return false;
+      }
     }
   }
 
